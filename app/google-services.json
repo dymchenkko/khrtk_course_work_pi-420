@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "778214007511",
+    "project_id": "cosmetologist-manager",
+    "storage_bucket": "cosmetologist-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778214007511:android:77c2c75834713721f50692",
+        "android_client_info": {
+          "package_name": "com.example.cosmetologistmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhRDzepIH4KbtB5HdGy2vlTGMs8YtjFGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
