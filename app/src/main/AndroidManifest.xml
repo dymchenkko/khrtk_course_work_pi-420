@@ -13,6 +13,9 @@
         android:theme="@style/Theme.CosmetologistManager"
         tools:targetApi="31">
         <activity
+            android:name=".NewAppointmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserAccountActivity"
             android:exported="false" />
         <activity
@@ -31,12 +34,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CreateNewClient"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="false"
-            android:label="@string/title_activity_create_new_client"
-            android:theme="@style/Theme.CosmetologistManager.Fullscreen" />
         <activity
             android:name=".Appointments"
             android:exported="false"
