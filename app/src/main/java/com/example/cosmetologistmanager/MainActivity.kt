@@ -5,7 +5,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -16,13 +16,31 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var datePickerDialog: DatePickerDialog? = null
+    var dataArrayList = ArrayList<ListData>()
+    var listAdapter: ListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
+        val nameList = arrayOf("Pasta", "Maggi", "Cake", "Pancake", "Pizza", "Burgers", "Fries")
 
+        for (i in 0 until nameList.size) {
+            var listData = ListData(
+                nameList[i]
+            )
+            dataArrayList.add(listData)
+        }
+        listAdapter = ListAdapter(this@MainActivity, dataArrayList)
+        binding.listAppointments.setAdapter(listAdapter)
+        binding.listAppointments.setClickable(true)
+
+        binding.listAppointments.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
+            val intent = Intent(this@MainActivity, AppointmentView::class.java)
+            intent.putExtra("name", nameList[i])
+            startActivity(intent)
+        })
         binding.logOutBtn.setOnClickListener {
 
                 val intent = Intent(this, UserAccountActivity::class.java)

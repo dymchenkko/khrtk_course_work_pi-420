@@ -4,22 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Appointments">
+    tools:context=".AppointmentView">
 
-<DatePicker
-    android:id="@+id/appointment_date_picker"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:ignore="MissingConstraints">
-
-
-</DatePicker>
-    <ListView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/appointment_date_picker"
-        tools:ignore="MissingConstraints">
-
-    </ListView>
+        android:id="@+id/detailName"
+        android:layout_marginTop="14dp"
+        android:text="Recipe Name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
