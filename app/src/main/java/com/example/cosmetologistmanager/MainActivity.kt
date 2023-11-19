@@ -5,10 +5,15 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
 
 
@@ -24,11 +29,38 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
-        val nameList = arrayOf("Pasta", "Maggi", "Cake", "Pancake", "Pizza", "Burgers", "Fries")
+        val items = mutableListOf<String>()
 
-        for (i in 0 until nameList.size) {
+        val user = firebaseAuth.currentUser
+        user?.let {
+            var uid = it.uid
+
+            FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (snapshot in dataSnapshot.children) {
+                            val user: Appointment? = snapshot.getValue(Appointment::class.java)
+                            items.add(user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute)
+                            for (i in 0 until items.size) {
+                                var listData = ListData(
+                                    items[i]
+                                )
+                                dataArrayList.add(listData)
+                            }
+                            listAdapter = ListAdapter(this@MainActivity, dataArrayList)
+                            binding.listAppointments.setAdapter(listAdapter)
+                            binding.listAppointments.setClickable(true)
+                            Log.d("appointments", user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute)
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+        }
+
+        for (i in 0 until items.size) {
             var listData = ListData(
-                nameList[i]
+                items[i]
             )
             dataArrayList.add(listData)
         }
@@ -38,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.listAppointments.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(this@MainActivity, AppointmentView::class.java)
-            intent.putExtra("name", nameList[i])
+            intent.putExtra("name", items[i])
             startActivity(intent)
         })
         binding.logOutBtn.setOnClickListener {
