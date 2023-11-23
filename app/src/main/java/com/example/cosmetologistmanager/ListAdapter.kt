@@ -26,6 +26,7 @@ class ListAdapter(context: Context, dataArrayList: ArrayList<ListData>) :
         val listName = view?.findViewById<TextView>(R.id.listName)
         val listTime:TextView = view?.findViewById<TextView>(R.id.listTime) as TextView
         listName?.text = listData!!.name
+        listTime?.text = listData!!.time
         return view
     }
 }

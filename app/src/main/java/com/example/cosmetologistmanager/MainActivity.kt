@@ -41,12 +41,10 @@ class MainActivity : AppCompatActivity() {
                         for (snapshot in dataSnapshot.children) {
                             val user: Appointment? = snapshot.getValue(Appointment::class.java)
                             items.add(user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute)
-                            for (i in 0 until items.size) {
                                 var listData = ListData(
-                                    items[i]
+                                    user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute, user?.date + ""
                                 )
                                 dataArrayList.add(listData)
-                            }
                             listAdapter = ListAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
@@ -56,13 +54,6 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
-        }
-
-        for (i in 0 until items.size) {
-            var listData = ListData(
-                items[i]
-            )
-            dataArrayList.add(listData)
         }
         listAdapter = ListAdapter(this@MainActivity, dataArrayList)
         binding.listAppointments.setAdapter(listAdapter)
@@ -94,10 +85,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         initDatePicker()
-        binding.datePickerButton.setText(getTodaysDate());
+        /*binding.datePickerButton.setText(getTodaysDate());
         binding.datePickerButton.setOnClickListener {
             datePickerDialog?.show()
-        }
+        }*/
     }
 
     private fun getTodaysDate(): String? {
@@ -115,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 var month = month
                 month += 1
                 val date = makeDateString(day, month, year)
-                binding.datePickerButton.setText(date)
+                //binding.datePickerButton.setText(date)
             }
         val cal: Calendar = Calendar.getInstance()
         val year: Int = cal.get(Calendar.YEAR)

@@ -70,7 +70,9 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         binding.clientsListSpinner.adapter = ad
         binding.addNewAppointmentBtn.setOnClickListener {
             val procedure_name = binding.newProcedureName.text.toString()
-            val date = binding.datePickerButton.text.toString()
+            val date_day = binding.datePickerButton.dayOfMonth.toString()
+            val date_month = binding.datePickerButton.month.toString()
+            val date_year = binding.datePickerButton.year.toString()
             val time_hour = binding.timePickerButton.hour.toString()
             val time_minute = binding.timePickerButton.minute.toString()
 
@@ -79,12 +81,14 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             user?.let {
                 var uid = it.uid
                 val md5 = MessageDigest.getInstance("md5")
-                md5.update((procedure_name + date + time_hour + time_minute).toByteArray())
+                md5.update((procedure_name + date_day + date_month + date_year + time_hour + time_minute).toByteArray())
 
                 val digest: ByteArray = md5.digest()
                 val appointments_hex =  digest.toHex()
                 database.child("appointments").child(uid).child(appointments_hex).child("procedure").setValue(procedure_name)
-                database.child("appointments").child(uid).child(appointments_hex).child("date").setValue(date)
+                database.child("appointments").child(uid).child(appointments_hex).child("day").setValue(date_day)
+                database.child("appointments").child(uid).child(appointments_hex).child("month").setValue(date_month)
+                database.child("appointments").child(uid).child(appointments_hex).child("year").setValue(date_day)
                 database.child("appointments").child(uid).child(appointments_hex).child("hour").setValue(time_hour)
                 database.child("appointments").child(uid).child(appointments_hex).child("minute").setValue(time_minute)
             }
