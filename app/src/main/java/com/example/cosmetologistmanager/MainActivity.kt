@@ -39,29 +39,29 @@ class MainActivity : AppCompatActivity() {
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
-                            val user: Appointment? = snapshot.getValue(Appointment::class.java)
-                            items.add(user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute)
+                            val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
+                            Log.d("hash", snapshot?.key+"")
                                 var listData = ListData(
-                                    user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute, user?.date + ""
+                                    new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
                                 )
-                                dataArrayList.add(listData)
+                            dataArrayList.add(listData)
+                            dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
                             listAdapter = ListAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
-                            Log.d("appointments", user?.procedure + " " + user?.date+ " " + user?.hour + " " + user?.minute)
+                            Log.d("list of appointments", items.toString())
+                            Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
         }
-        listAdapter = ListAdapter(this@MainActivity, dataArrayList)
-        binding.listAppointments.setAdapter(listAdapter)
-        binding.listAppointments.setClickable(true)
 
         binding.listAppointments.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(this@MainActivity, AppointmentView::class.java)
-            intent.putExtra("name", items[i])
+            intent.putExtra("name", dataArrayList[i].name)
+            intent.putExtra("hash", dataArrayList[i].hash)
             startActivity(intent)
         })
         binding.logOutBtn.setOnClickListener {
@@ -84,57 +84,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        initDatePicker()
-        /*binding.datePickerButton.setText(getTodaysDate());
-        binding.datePickerButton.setOnClickListener {
-            datePickerDialog?.show()
-        }*/
     }
 
-    private fun getTodaysDate(): String? {
-        val cal: Calendar = Calendar.getInstance()
-        val year: Int = cal.get(Calendar.YEAR)
-        var month: Int = cal.get(Calendar.MONTH)
-        month += 1
-        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
-        return makeDateString(day, month, year)
-    }
-
-    private fun initDatePicker() {
-        val dateSetListener =
-            OnDateSetListener { datePicker, year, month, day ->
-                var month = month
-                month += 1
-                val date = makeDateString(day, month, year)
-                //binding.datePickerButton.setText(date)
-            }
-        val cal: Calendar = Calendar.getInstance()
-        val year: Int = cal.get(Calendar.YEAR)
-        val month: Int = cal.get(Calendar.MONTH)
-        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
-        val style: Int = AlertDialog.THEME_HOLO_LIGHT
-        datePickerDialog = DatePickerDialog(this, style, dateSetListener, year, month, day)
-        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-
-    private fun makeDateString(day: Int, month: Int, year: Int): String? {
-        return getMonthFormat(month) + " " + day + " " + year
-    }
-
-    private fun getMonthFormat(month: Int): String {
-        if (month == 1) return "JAN"
-        if (month == 2) return "FEB"
-        if (month == 3) return "MAR"
-        if (month == 4) return "APR"
-        if (month == 5) return "MAY"
-        if (month == 6) return "JUN"
-        if (month == 7) return "JUL"
-        if (month == 8) return "AUG"
-        if (month == 9) return "SEP"
-        if (month == 10) return "OCT"
-        if (month == 11) return "NOV"
-        return if (month == 12) "DEC" else "JAN"
-
-        //default should never happen
-    }
 }

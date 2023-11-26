@@ -75,7 +75,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val date_year = binding.datePickerButton.year.toString()
             val time_hour = binding.timePickerButton.hour.toString()
             val time_minute = binding.timePickerButton.minute.toString()
-
+            val additional_information = binding.newAdditionalInformation.text.toString()
 
             val user = firebaseAuth.currentUser
             user?.let {
@@ -88,9 +88,11 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 database.child("appointments").child(uid).child(appointments_hex).child("procedure").setValue(procedure_name)
                 database.child("appointments").child(uid).child(appointments_hex).child("day").setValue(date_day)
                 database.child("appointments").child(uid).child(appointments_hex).child("month").setValue(date_month)
-                database.child("appointments").child(uid).child(appointments_hex).child("year").setValue(date_day)
+                database.child("appointments").child(uid).child(appointments_hex).child("year").setValue(date_year)
                 database.child("appointments").child(uid).child(appointments_hex).child("hour").setValue(time_hour)
                 database.child("appointments").child(uid).child(appointments_hex).child("minute").setValue(time_minute)
+                database.child("appointments").child(uid).child(appointments_hex).child("additional_information").setValue(additional_information)
+
             }
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
