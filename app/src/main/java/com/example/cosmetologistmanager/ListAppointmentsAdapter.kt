@@ -1,19 +1,16 @@
 package com.example.cosmetologistmanager
 
 import android.annotation.SuppressLint
-import com.example.cosmetologistmanager.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.TextView
-import com.example.cosmetologistmanager.ListData
 
 @SuppressLint("ResourceType")
-class ListAdapter(context: Context, dataArrayList: ArrayList<ListData>) :
-    ArrayAdapter<ListData>(
+class ListAppointmentsAdapter(context: Context, dataArrayList: ArrayList<ListAppointmentData>) :
+    ArrayAdapter<ListAppointmentData>(
         context, R.layout.list_item,
         dataArrayList!!
     ) {

@@ -1,5 +1,6 @@
 package com.example.cosmetologistmanager
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -59,6 +60,8 @@ class EditAppointmentActivity : AppCompatActivity() {
                     binding.newAdditionalInformation.setText(appointment.additional_information)
 
                     binding.editAppointmentBtn.setOnClickListener {
+                        FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(hash.toString()).removeValue();
+
                         val procedure_name = binding.newProcedureName.text.toString()
                         val date_day = binding.datePickerButton.dayOfMonth.toString()
                         val date_month = binding.datePickerButton.month.toString()
@@ -80,13 +83,13 @@ class EditAppointmentActivity : AppCompatActivity() {
                         database.child("appointments").child(uid).child(appointments_hex).child("hour").setValue(time_hour)
                         database.child("appointments").child(uid).child(appointments_hex).child("minute").setValue(time_minute)
                         database.child("appointments").child(uid).child(appointments_hex).child("additional_information").setValue(additional_information)
-
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
                     }
 
                     }.addOnFailureListener{
                     Log.e("firebase", "Error getting data", it)
                 }
-                FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(hash.toString()).removeValue();
             }
         }
 

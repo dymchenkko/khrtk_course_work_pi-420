@@ -1,28 +1,25 @@
 package com.example.cosmetologistmanager
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private var datePickerDialog: DatePickerDialog? = null
-    var dataArrayList = ArrayList<ListData>()
-    var listAdapter: ListAdapter? = null
+    var dataArrayList = ArrayList<ListAppointmentData>()
+    var listAdapter: ListAppointmentsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +38,12 @@ class MainActivity : AppCompatActivity() {
                         for (snapshot in dataSnapshot.children) {
                             val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
                             Log.d("hash", snapshot?.key+"")
-                                var listData = ListData(
+                                var listData = ListAppointmentData(
                                     new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
                                 )
                             dataArrayList.add(listData)
                             dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
-                            listAdapter = ListAdapter(this@MainActivity, dataArrayList)
+                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
                             Log.d("list of appointments", items.toString())
@@ -65,7 +62,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         })
         binding.logOutBtn.setOnClickListener {
-
                 val intent = Intent(this, UserAccountActivity::class.java)
                 startActivity(intent)
         }
@@ -84,6 +80,46 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        binding.seeAllClients.setOnClickListener {
+            if(firebaseAuth.currentUser != null)
+            {
+                val intent = Intent(this, ClientsActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun initializeCamera() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        val items = mutableListOf<String>()
+
+        val user = firebaseAuth.currentUser
+        user?.let {
+            var uid = it.uid
+
+            FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (snapshot in dataSnapshot.children) {
+                            val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
+                            Log.d("hash", snapshot?.key+"")
+                            var listData = ListAppointmentData(
+                                new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
+                            )
+                            dataArrayList.add(listData)
+                            dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
+                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                            binding.listAppointments.setAdapter(listAdapter)
+                            binding.listAppointments.setClickable(true)
+                            Log.d("list of appointments", items.toString())
+                            Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+        }
+    }
 }

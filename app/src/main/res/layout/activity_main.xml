@@ -63,4 +63,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"/>
 
+    <Button
+        android:text="all clients"
+        android:id="@+id/see_all_clients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintLeft_toRightOf="@id/add_new_client_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 package com.example.cosmetologistmanager
-class ListData(
+class ListAppointmentData(
     var name: String,
     var hour: String,
     var minute: String,
