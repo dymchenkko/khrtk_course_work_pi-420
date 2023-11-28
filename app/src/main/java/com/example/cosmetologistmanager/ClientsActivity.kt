@@ -1,8 +1,10 @@
 package com.example.cosmetologistmanager
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
 import com.example.cosmetologistmanager.databinding.ActivityClientsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -50,5 +52,12 @@ class ClientsActivity : AppCompatActivity() {
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
         }
+
+        binding.listClients.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            val intent = Intent(this@ClientsActivity, ClientView::class.java)
+            intent.putExtra("name", dataArrayList[i].name)
+            intent.putExtra("hash", dataArrayList[i].hash)
+            startActivity(intent)
+        })
     }
 }
