@@ -52,19 +52,32 @@
         android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:layout_width="wrap_content"
+
+    <ListView
+        android:id="@+id/list_appointments"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_client"
-        android:layout_marginTop="14dp"
-        android:text="Редагувати данні клаєнта"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/delete_client"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        tools:listitem="@layout/list_item"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_gravity="center"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@id/additional_information_text_view"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints" /><Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/edit_client"
+    android:layout_marginTop="14dp"
+    android:text="Редагувати данні клаєнта"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toTopOf="@id/delete_client"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_gravity="center"
+    tools:ignore="MissingConstraints" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,6 +91,5 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,16 +7,22 @@
     tools:context=".NewClientActivity">
 <EditText
     android:id="@+id/new_client_name"
-    android:layout_width="250dp"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="200dp"
     android:layout_height="50dp"
     android:hint="Ім'я"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     tools:ignore="MissingConstraints" />
     <EditText
         android:id="@+id/new_client_surname"
         android:hint="Прізвище"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_height="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -26,7 +32,9 @@
     <EditText
         android:id="@+id/new_client_patronymic"
         android:hint="По-батькові"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_height="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -36,14 +44,16 @@
     <EditText
         android:id="@+id/new_additional_information"
         android:hint="Додаткова інформація"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_height="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_client_patronymic"
         tools:ignore="MissingConstraints" />
     <Button
-        android:text="add new client"
+        android:text="Додати клієнта"
         android:id="@+id/add_new_client_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

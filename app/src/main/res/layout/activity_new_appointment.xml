@@ -15,11 +15,12 @@
             android:layout_height="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:hint="Назва процедури"
             tools:ignore="MissingConstraints"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="70dp"/>
 
         <DatePicker
             android:id="@+id/datePickerButton"
@@ -40,7 +41,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
         <Button
-            android:text="add new appointment"
+            android:text="Додати новий запис"
             android:id="@+id/add_new_appointment_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +49,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_additional_information"
-            android:layout_marginTop="200dp"/>
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="150dp"

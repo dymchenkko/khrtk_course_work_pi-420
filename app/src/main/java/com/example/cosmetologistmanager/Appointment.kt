@@ -8,5 +8,5 @@ class Appointment {
     val hour: String? = null
     val minute: String? = null
     val additional_information: String? = null
-
+    val client: String? = null
 }
