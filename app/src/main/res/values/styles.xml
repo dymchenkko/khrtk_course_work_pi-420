@@ -8,4 +8,15 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+    <style name="NoHighlightBottomNavigationTheme" parent="">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorAccent">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="itemTextAppearanceInactive">@drawable/selected_text</item>
+        <item name="itemTextAppearanceActive">@drawable/selected_text</item>
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="colorControlHighlight">@android:color/transparent</item>
+
+
+    </style>
 </resources>

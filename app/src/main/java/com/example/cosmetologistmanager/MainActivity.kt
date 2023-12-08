@@ -1,13 +1,18 @@
 package com.example.cosmetologistmanager
 
+import android.R
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,12 +26,34 @@ class MainActivity : AppCompatActivity() {
     var dataArrayList = ArrayList<ListAppointmentData>()
     var listAdapter: ListAppointmentsAdapter? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
+        dataArrayList = ArrayList<ListAppointmentData>()
+        binding.bottomNavigation.setItemIconTintList(null);
+
+        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
+            Log.d("itemid", item.itemId.toString())
+
+            if (item.itemId == 2131230974) {
+                if(firebaseAuth.currentUser != null)
+                {
+                    val intent = Intent(this, NewClientActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            else if (item.itemId == 2131230946) {
+
+            }
+            else if (item.itemId == 2131231128) {
+
+            }
+            true
+        })
 
         val user = firebaseAuth.currentUser
         user?.let {
@@ -36,24 +63,79 @@ class MainActivity : AppCompatActivity() {
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
-                            val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
-                            Log.d("hash", snapshot?.key+"")
+                            val new_appointment: Appointment? =
+                                snapshot.getValue(Appointment::class.java)
+                            Log.d("hash", snapshot?.key + "")
+
+                            if (binding.datePicker.dayOfMonth.toString()
+                                    .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                    .equals(new_appointment!!.month) && binding.datePicker.year.toString()
+                                    .equals(new_appointment!!.year)
+                            ) {
                                 var listData = ListAppointmentData(
-                                    new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
+                                    new_appointment?.procedure.toString(),
+                                    new_appointment?.hour + "",
+                                    new_appointment?.minute + "",
+                                    snapshot?.key + ""
                                 )
-                            dataArrayList.add(listData)
-                            dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
-                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                                dataArrayList.add(listData)
+                                dataArrayList.sortWith(
+                                    compareBy(
+                                        { it.hour?.toIntOrNull() },
+                                        { it.minute?.toIntOrNull() })
+                                )
+
+                            }
+                            listAdapter =
+                                ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
                             Log.d("list of appointments", items.toString())
-                            Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
+                            Log.d(
+                                "appointments",
+                                new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
+                            )
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
         }
+        binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
+            dataArrayList = ArrayList<ListAppointmentData>()
+            val user = firebaseAuth.currentUser
+            user?.let {
+                var uid = it.uid
+
+                FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (snapshot in dataSnapshot.children) {
+                                val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
+                                Log.d("hash", snapshot?.key+"")
+
+                                if (binding.datePicker.dayOfMonth.toString().equals(new_appointment!!.day) && binding.datePicker.month.toString().equals(new_appointment!!.month) && binding.datePicker.year.toString().equals(new_appointment!!.year)) {
+                                    var listData = ListAppointmentData(
+                                        new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
+                                    )
+                                    dataArrayList.add(listData)
+                                    dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
+
+                                }
+                                listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                                binding.listAppointments.setAdapter(listAdapter)
+                                binding.listAppointments.setClickable(true)
+                                Log.d("list of appointments", items.toString())
+                                Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {}
+                    })
+            }
+
+        }
+
 
         binding.listAppointments.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(this@MainActivity, AppointmentView::class.java)
@@ -90,11 +172,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun initializeCamera() {
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
-
+        dataArrayList = ArrayList<ListAppointmentData>()
         val user = firebaseAuth.currentUser
         user?.let {
             var uid = it.uid
@@ -103,23 +186,94 @@ class MainActivity : AppCompatActivity() {
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
-                            val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
-                            Log.d("hash", snapshot?.key+"")
-                            var listData = ListAppointmentData(
-                                new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
-                            )
-                            dataArrayList.add(listData)
-                            dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
-                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                            val new_appointment: Appointment? =
+                                snapshot.getValue(Appointment::class.java)
+                            Log.d("hash", snapshot?.key + "")
+
+                            if (binding.datePicker.dayOfMonth.toString()
+                                    .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                    .equals(new_appointment!!.month) && binding.datePicker.year.toString()
+                                    .equals(new_appointment!!.year)
+                            ) {
+                                var listData = ListAppointmentData(
+                                    new_appointment?.procedure.toString(),
+                                    new_appointment?.hour + "",
+                                    new_appointment?.minute + "",
+                                    snapshot?.key + ""
+                                )
+                                dataArrayList.add(listData)
+                                dataArrayList.sortWith(
+                                    compareBy(
+                                        { it.hour?.toIntOrNull() },
+                                        { it.minute?.toIntOrNull() })
+                                )
+
+                            }
+                            listAdapter =
+                                ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
                             Log.d("list of appointments", items.toString())
-                            Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
+                            Log.d(
+                                "appointments",
+                                new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
+                            )
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
         }
+        binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
+            dataArrayList = ArrayList<ListAppointmentData>()
+            val user = firebaseAuth.currentUser
+            user?.let {
+                var uid = it.uid
+
+                FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (snapshot in dataSnapshot.children) {
+                                val new_appointment: Appointment? =
+                                    snapshot.getValue(Appointment::class.java)
+                                Log.d("hash", snapshot?.key + "")
+
+                                if (binding.datePicker.dayOfMonth.toString()
+                                        .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                        .equals(new_appointment!!.month) && binding.datePicker.year.toString()
+                                        .equals(new_appointment!!.year)
+                                ) {
+                                    var listData = ListAppointmentData(
+                                        new_appointment?.procedure.toString(),
+                                        new_appointment?.hour + "",
+                                        new_appointment?.minute + "",
+                                        snapshot?.key + ""
+                                    )
+                                    dataArrayList.add(listData)
+                                    dataArrayList.sortWith(
+                                        compareBy(
+                                            { it.hour?.toIntOrNull() },
+                                            { it.minute?.toIntOrNull() })
+                                    )
+
+                                }
+                                listAdapter =
+                                    ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                                binding.listAppointments.setAdapter(listAdapter)
+                                binding.listAppointments.setClickable(true)
+                                Log.d("list of appointments", items.toString())
+                                Log.d(
+                                    "appointments",
+                                    new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
+                                )
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {}
+                    })
+            }
+
+        }
     }
-}
+
+    }

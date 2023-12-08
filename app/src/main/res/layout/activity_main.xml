@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <DatePicker
-        android:id="@+id/datePickerButton"
+        android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="JAN 01 2020"
@@ -32,7 +32,7 @@
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datePickerButton"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker"
         android:layout_marginTop="10dp"/>
 
     <Button
@@ -72,5 +72,23 @@
         app:layout_constraintLeft_toRightOf="@id/add_new_client_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:defaultFocusHighlightEnabled="true"
+        app:itemTextColor="@color/black"
+        app:itemRippleColor="@color/black"
+        android:overScrollMode="never"
+        android:focusableInTouchMode="false"
+        app:labelVisibilityMode="labeled"
+       app:itemActiveIndicatorStyle="@style/NoHighlightBottomNavigationTheme"
+       app:layout_constraintBottom_toBottomOf="parent"
+        app:itemBackground="@android:color/transparent"
+        app:itemTextAppearanceActive="@style/NoHighlightBottomNavigationTheme"
+        app:menu="@menu/bottom_app_bar_menu"
+        tools:ignore="MissingConstraints"
+        style="@style/NoHighlightBottomNavigationTheme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
