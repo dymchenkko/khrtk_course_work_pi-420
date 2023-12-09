@@ -1,13 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home"
+    <item android:id="@+id/new_client"
         android:title="додати клієнта"
-        android:icon="@drawable/logo" />
-    <item android:id="@+id/favorites"
+        android:icon="@drawable/add_user" />
+    <item android:id="@+id/new_apointment"
         android:title="додати запис"
-        android:icon="@drawable/logo" />
-    <item android:id="@+id/profile"
+        android:icon="@drawable/add_appointment" />
+    <item android:id="@+id/all_clients"
         android:title="всі клієнти"
-        android:titleCondensed="@string/app_name"
-        android:iconTint="@color/material_on_primary_emphasis_high_type"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/users" />
 </menu>

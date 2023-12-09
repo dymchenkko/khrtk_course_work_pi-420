@@ -39,18 +39,26 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             Log.d("itemid", item.itemId.toString())
 
-            if (item.itemId == 2131230974) {
+            if (item.itemId == 2131231297) {
                 if(firebaseAuth.currentUser != null)
                 {
                     val intent = Intent(this, NewClientActivity::class.java)
                     startActivity(intent)
                 }
             }
-            else if (item.itemId == 2131230946) {
-
+            else if (item.itemId == 2131231296) {
+                if(firebaseAuth.currentUser != null)
+                {
+                    val intent = Intent(this, NewAppointmentActivity::class.java)
+                    startActivity(intent)
+                }
             }
-            else if (item.itemId == 2131231128) {
-
+            else if (item.itemId == 2131231295) {
+                if(firebaseAuth.currentUser != null)
+                {
+                    val intent = Intent(this, ClientsActivity::class.java)
+                    startActivity(intent)
+                }
             }
             true
         })
@@ -115,6 +123,8 @@ class MainActivity : AppCompatActivity() {
                                 Log.d("hash", snapshot?.key+"")
 
                                 if (binding.datePicker.dayOfMonth.toString().equals(new_appointment!!.day) && binding.datePicker.month.toString().equals(new_appointment!!.month) && binding.datePicker.year.toString().equals(new_appointment!!.year)) {
+                                    val age_group = if (new_appointment?.minute.toString().length == 1) "0"+new_appointment?.minute.toString() else new_appointment?.minute.toString()
+
                                     var listData = ListAppointmentData(
                                         new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
                                     )
@@ -146,29 +156,6 @@ class MainActivity : AppCompatActivity() {
         binding.logOutBtn.setOnClickListener {
                 val intent = Intent(this, UserAccountActivity::class.java)
                 startActivity(intent)
-        }
-        binding.addNewClientBtn.setOnClickListener {
-            if(firebaseAuth.currentUser != null)
-            {
-                val intent = Intent(this, NewClientActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        binding.addNewAppointmentBtn.setOnClickListener {
-            if(firebaseAuth.currentUser != null)
-            {
-                val intent = Intent(this, NewAppointmentActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        binding.seeAllClients.setOnClickListener {
-            if(firebaseAuth.currentUser != null)
-            {
-                val intent = Intent(this, ClientsActivity::class.java)
-                startActivity(intent)
-            }
         }
     }
 
