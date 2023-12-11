@@ -41,7 +41,6 @@ class ClientsActivity : AppCompatActivity() {
                             Log.d("name", client?.surname.toString())
 
                             dataArrayList.add(listData)
-                            //dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
                             listAdapter = ListClientsAdapter(this@ClientsActivity, dataArrayList)
                             binding.listClients.setAdapter(listAdapter)
                             binding.listClients.setClickable(true)

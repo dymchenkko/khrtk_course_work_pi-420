@@ -74,9 +74,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                         })
                 }
 
-
-
-
         binding.timePickerButton.setIs24HourView(true);
 
 

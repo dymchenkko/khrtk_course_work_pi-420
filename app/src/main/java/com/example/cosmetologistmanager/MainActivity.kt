@@ -39,21 +39,21 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             Log.d("itemid", item.itemId.toString())
 
-            if (item.itemId == 2131231297) {
+            if (item.itemId == 2131231097) {
                 if(firebaseAuth.currentUser != null)
                 {
                     val intent = Intent(this, NewClientActivity::class.java)
                     startActivity(intent)
                 }
             }
-            else if (item.itemId == 2131231296) {
+            else if (item.itemId == 2131231095) {
                 if(firebaseAuth.currentUser != null)
                 {
                     val intent = Intent(this, NewAppointmentActivity::class.java)
                     startActivity(intent)
                 }
             }
-            else if (item.itemId == 2131231295) {
+            else if (item.itemId == 2131230808) {
                 if(firebaseAuth.currentUser != null)
                 {
                     val intent = Intent(this, ClientsActivity::class.java)
