@@ -1,7 +1,9 @@
 package com.example.cosmetologistmanager
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivityNewClientBinding
@@ -21,17 +23,31 @@ class NewClientActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
         database = Firebase.database.reference
         firebaseAuth = FirebaseAuth.getInstance()
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.skin_types,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.skinTypeSpinner.adapter = adapter
+        }
 
         binding.addNewClientBtn.setOnClickListener {
             val name = binding.newClientName.text.toString()
             val surname = binding.newClientSurname.text.toString()
             val patronymic = binding.newClientPatronymic.text.toString()
+            val phone_number = binding.newPhoneNumber.text.toString()
+            val allergy = binding.newAllergy.text.toString()
+            val skin_condition = binding.skinCondition.text.toString()
+            val skin_type: String = binding.skinTypeSpinner.getSelectedItem().toString()
+
             val additional_information = binding.newAdditionalInformation.text.toString()
 
             val md5 = MessageDigest.getInstance("md5")
@@ -69,7 +85,14 @@ class NewClientActivity : AppCompatActivity() {
                                             .setValue(patronymic)
                                         database.child("clients").child(uid).child(client_hex)
                                             .child("additional_information").setValue(additional_information)
-
+                                        database.child("clients").child(uid).child(client_hex)
+                                            .child("phone_number").setValue(phone_number)
+                                        database.child("clients").child(uid).child(client_hex)
+                                            .child("skin_condition").setValue(skin_condition)
+                                        database.child("clients").child(uid).child(client_hex)
+                                            .child("skin_type").setValue(skin_type)
+                                        database.child("clients").child(uid).child(client_hex)
+                                            .child("allergy").setValue(allergy)
                                         val intent = Intent(this@NewClientActivity, MainActivity::class.java)
                                         startActivity(intent)
                                     }

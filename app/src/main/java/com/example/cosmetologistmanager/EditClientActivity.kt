@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import com.example.cosmetologistmanager.databinding.ActivityEditAppointmentBinding
 import com.example.cosmetologistmanager.databinding.ActivityEditClientBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,14 @@ class EditClientActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.skin_types,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.skinTypeSpinner.adapter = adapter
+        }
         val intent = this.intent
         if (intent != null) {
             var hash = intent.getStringExtra("hash")

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="skin_types">
+        <item>Нормальна</item>
+        <item>Суха</item>
+        <item>Комбінована</item>
+        <item>Жирна</item>
+    </string-array>
+</resources>

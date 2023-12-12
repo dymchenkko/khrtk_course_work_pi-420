@@ -104,7 +104,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                 database.child("appointments").child(uid).child(appointments_hex).child("minute").setValue(time_minute)
                 database.child("appointments").child(uid).child(appointments_hex).child("additional_information").setValue(additional_information)
                 val client: String = binding.clientsListSpinner.getSelectedItem().toString()
-                val client_id = "";
                 for (pair in items) {
                     if (pair.first == client) {
                         database.child("appointments").child(uid).child(appointments_hex).child("client").setValue(pair.second)
