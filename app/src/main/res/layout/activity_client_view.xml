@@ -7,49 +7,96 @@
     tools:context=".ClientView">
 
     <TextView
+        android:id="@+id/client_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/client_name"
+        android:layout_gravity="center"
         android:layout_marginTop="14dp"
         android:text="Client name"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
 
     <TextView
+        android:id="@+id/client_surname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/client_surname"
+        android:layout_gravity="center"
         android:layout_marginTop="14dp"
         android:text="Client surname"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/client_name"
-        android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
+
     <TextView
+        android:id="@+id/client_patronymic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/client_patronymic"
+        android:layout_gravity="center"
         android:layout_marginTop="14dp"
         android:text="Client patronymic"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/client_surname"
-        android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
     <TextView
+        android:id="@+id/client_phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:text="Client phone number"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/client_patronymic"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/client_skin_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:text="Client skin type"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/client_phone_number"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/client_skin_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:text="Client skin condition"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/client_skin_type"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:id="@+id/client_allergy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:text="Client allergy"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/client_skin_condition"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/additional_information_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="14dp"
         android:text="Additional information"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/client_patronymic"
-        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/client_allergy"
         tools:ignore="MissingConstraints" />
 
 
@@ -57,39 +104,49 @@
         android:id="@+id/list_appointments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/black"
-        tools:listitem="@layout/list_item"
+        android:textSize="30sp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/additional_information_text_view"
-        android:layout_marginTop="10dp"
-        tools:ignore="MissingConstraints" /><Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/edit_client"
-    android:layout_marginTop="14dp"
-    android:text="Редагувати данні клаєнта"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    app:layout_constraintBottom_toTopOf="@id/delete_client"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    android:layout_gravity="center"
-    tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:listitem="@layout/list_item" />
+
     <Button
+        android:id="@+id/edit_client"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/delete_client"
+        android:layout_gravity="center"
         android:layout_marginTop="14dp"
+        android:background="@android:color/white"
+        app:backgroundTint="@color/black"
+        android:text="Редагувати данні"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+
+        app:layout_constraintBottom_toTopOf="@id/delete_client"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/delete_client"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/white"
+        app:backgroundTint="@color/black"
         android:text="Видалити клієнта"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

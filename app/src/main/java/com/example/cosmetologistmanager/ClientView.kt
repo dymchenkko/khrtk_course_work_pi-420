@@ -34,11 +34,15 @@ class ClientView : AppCompatActivity() {
                 hash = intent.getStringExtra("hash")
                 FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                     .child(hash.toString()).get().addOnSuccessListener {
-                        var appointment: Client? = it.getValue(Client::class.java)
-                        binding.clientName.setText(appointment?.name)
-                        binding.clientSurname.setText(appointment?.surname)
-                        binding.clientPatronymic.setText(appointment?.patronymic)
-                        binding.additionalInformationTextView.setText(appointment?.additional_information)
+                        var client: Client? = it.getValue(Client::class.java)
+                        binding.clientName.setText("Ім'я: " + client?.name)
+                        binding.clientSurname.setText("Прізвище: " + client?.surname)
+                        binding.clientPatronymic.setText("По-батькові: " + client?.patronymic)
+                        binding.clientPhoneNumber.setText("Номер телефону: " + client?.phone_number)
+                        binding.clientSkinCondition.setText("Стан шкіри: " + client?.skin_condition)
+                        binding.clientSkinType.setText("Тип шкіри: " + client?.skin_type)
+                        binding.clientAllergy.setText("Алергія: " + client?.allergy)
+                        binding.additionalInformationTextView.setText("Додаткова інформація: " + client?.additional_information)
 
                     }
             }
