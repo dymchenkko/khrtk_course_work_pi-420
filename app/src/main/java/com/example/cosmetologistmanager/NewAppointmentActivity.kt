@@ -37,9 +37,8 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         firebaseAuth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         setContentView(binding.root)
-        val items = mutableListOf<Pair<String, String>>(Pair("Клієнт не вибраний",""))
+        val items = mutableListOf<Pair<String, String>>()
 
-        //val items = mutableListOf<String>("Клієнт не вибраний")
         val user = firebaseAuth.currentUser
                 user?.let {
                     var uid = it.uid
@@ -51,7 +50,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                                     val user: Client? = snapshot.getValue(Client::class.java)
                                     Log.d("client hash", snapshot?.key.toString())
                                     items.add(Pair(user?.name + " " + user?.surname+ " " + user?.patronymic, snapshot?.key.toString()))
-                                    //items.add(Pair("dwd", "ewdew"))
 
                                     Log.d("items",  "$items")
 
@@ -65,8 +63,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                                     ad.setDropDownViewResource(
                                         android.R.layout.simple_spinner_dropdown_item)
                                     binding.clientsListSpinner.adapter = ad
-
-                                    //items.add(user?.name + " " + user?.surname+ " " + user?.patronymic)
                                 }
                             }
 
