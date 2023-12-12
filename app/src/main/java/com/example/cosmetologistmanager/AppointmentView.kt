@@ -37,10 +37,17 @@ class AppointmentView : AppCompatActivity() {
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .child(hash.toString()).get().addOnSuccessListener {
                     var appointment: Appointment? = it.getValue(Appointment::class.java)
-                        binding.detailName.setText(appointment?.procedure)
+                        binding.appointmentName.setText("Процедура: " + appointment?.procedure)
                         binding.dateTextView.setText("Дата процедури: ${appointment?.day}/${appointment?.month}/${appointment?.year}")
                         binding.timeTextView.setText("Час процедури: ${appointment?.hour}:${appointment?.minute}")
                         binding.additionalInformationTextView.setText(appointment?.additional_information)
+
+                        FirebaseDatabase.getInstance().reference.child("clients").child(uid).child(appointment?.client.toString())
+                            .get().addOnSuccessListener {
+                                var client: Client? = it.getValue(Client::class.java)
+                                binding.clientTextView.setText("Клієнт: ${client?.surname} ${client?.name} ${client?.patronymic}")
+
+                            }
 
                     }
                 }
