@@ -21,8 +21,8 @@
             android:id="@+id/new_client_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="50"
-            android:hint="Ім'я" />
+            android:hint="Ім'я"
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -39,8 +39,8 @@
             android:id="@+id/new_client_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="50"
-            android:hint="Прізвище" />
+            android:hint="Прізвище"
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -57,8 +57,8 @@
             android:id="@+id/new_client_patronymic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="50"
-            android:hint="По-батькові" />
+            android:hint="По-батькові"
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -75,36 +75,35 @@
             android:id="@+id/new_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="50"
-            android:hint="Номер телефону" />
+            android:hint="Номер телефону"
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/skin_type"
-        android:text="Тип шкіри"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:text="Тип шкіри"
 
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints"
-        app:layout_constraintTop_toBottomOf="@id/new_phone_number_layout" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_phone_number_layout"
+        tools:ignore="MissingConstraints" />
 
     <Spinner
         android:id="@+id/skin_type_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/skin_type"
-        tools:ignore="MissingConstraints"
-        android:layout_marginTop="10dp"
-        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginHorizontal="16dp"
-
-        android:visibility="visible"
-        android:spinnerMode="dialog"
+        android:layout_marginTop="10dp"
         android:dropDownSelector="@color/cardview_shadow_start_color"
-        />
+        android:spinnerMode="dialog"
+        android:visibility="visible"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/skin_type"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/skin_condition_layout"
@@ -120,27 +119,27 @@
             android:id="@+id/skin_condition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="300"
-            android:hint="Алергія" />
+            android:hint="Алергія"
+            android:maxLength="300" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/allergy_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/skin_condition_layout">
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/new_allergy"
+        android:id="@+id/allergy_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="300"
-        android:hint="Стан шкіри" />
-</com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_condition_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/new_allergy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Стан шкіри"
+            android:maxLength="300" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_additional_information_layout"
@@ -156,8 +155,8 @@
             android:id="@+id/new_additional_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="300"
-            android:hint="Додаткова інформація" />
+            android:hint="Додаткова інформація"
+            android:maxLength="300" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

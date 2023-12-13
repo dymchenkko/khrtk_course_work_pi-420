@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -40,22 +39,17 @@ class MainActivity : AppCompatActivity() {
             Log.d("itemid", item.itemId.toString())
 
             if (item.itemId == com.example.cosmetologistmanager.R.id.new_client) {
-                if(firebaseAuth.currentUser != null)
-                {
+                if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, NewClientActivity::class.java)
                     startActivity(intent)
                 }
-            }
-            else if (item.itemId == com.example.cosmetologistmanager.R.id.new_apointment) {
-                if(firebaseAuth.currentUser != null)
-                {
+            } else if (item.itemId == com.example.cosmetologistmanager.R.id.new_apointment) {
+                if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, NewAppointmentActivity::class.java)
                     startActivity(intent)
                 }
-            }
-            else if (item.itemId == com.example.cosmetologistmanager.R.id.all_clients) {
-                if(firebaseAuth.currentUser != null)
-                {
+            } else if (item.itemId == com.example.cosmetologistmanager.R.id.all_clients) {
+                if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, ClientsActivity::class.java)
                     startActivity(intent)
                 }
@@ -119,24 +113,41 @@ class MainActivity : AppCompatActivity() {
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             for (snapshot in dataSnapshot.children) {
-                                val new_appointment: Appointment? = snapshot.getValue(Appointment::class.java)
-                                Log.d("hash", snapshot?.key+"")
+                                val new_appointment: Appointment? =
+                                    snapshot.getValue(Appointment::class.java)
+                                Log.d("hash", snapshot?.key + "")
 
-                                if (binding.datePicker.dayOfMonth.toString().equals(new_appointment!!.day) && binding.datePicker.month.toString().equals(new_appointment!!.month) && binding.datePicker.year.toString().equals(new_appointment!!.year)) {
-                                    val age_group = if (new_appointment?.minute.toString().length == 1) "0"+new_appointment?.minute.toString() else new_appointment?.minute.toString()
+                                if (binding.datePicker.dayOfMonth.toString()
+                                        .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                        .equals(new_appointment!!.month) && binding.datePicker.year.toString()
+                                        .equals(new_appointment!!.year)
+                                ) {
+                                    val age_group =
+                                        if (new_appointment?.minute.toString().length == 1) "0" + new_appointment?.minute.toString() else new_appointment?.minute.toString()
 
                                     var listData = ListAppointmentData(
-                                        new_appointment?.procedure.toString(), new_appointment?.hour+"", new_appointment?.minute+"", snapshot?.key+""
+                                        new_appointment?.procedure.toString(),
+                                        new_appointment?.hour + "",
+                                        new_appointment?.minute + "",
+                                        snapshot?.key + ""
                                     )
                                     dataArrayList.add(listData)
-                                    dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
+                                    dataArrayList.sortWith(
+                                        compareBy(
+                                            { it.hour?.toIntOrNull() },
+                                            { it.minute?.toIntOrNull() })
+                                    )
 
                                 }
-                                listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                                listAdapter =
+                                    ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                                 binding.listAppointments.setAdapter(listAdapter)
                                 binding.listAppointments.setClickable(true)
                                 Log.d("list of appointments", items.toString())
-                                Log.d("appointments", new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute)
+                                Log.d(
+                                    "appointments",
+                                    new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
+                                )
                             }
                         }
 
@@ -154,8 +165,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         })
         binding.logOutBtn.setOnClickListener {
-                val intent = Intent(this, UserAccountActivity::class.java)
-                startActivity(intent)
+            val intent = Intent(this, UserAccountActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -263,4 +274,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    }
+}
