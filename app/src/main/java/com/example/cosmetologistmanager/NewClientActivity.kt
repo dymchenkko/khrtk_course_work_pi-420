@@ -30,6 +30,7 @@ class NewClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         database = Firebase.database.reference
         firebaseAuth = FirebaseAuth.getInstance()
+
         ArrayAdapter.createFromResource(
             this,
             R.array.skin_types,

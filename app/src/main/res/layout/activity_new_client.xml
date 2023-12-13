@@ -71,12 +71,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_client_patronymic_layout">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.cosmetologistmanager.PrefixEditText
             android:id="@+id/new_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Номер телефону"
-            android:maxLength="50" />
+            android:hint="номер телефону"
+            android:inputType="phone"
+            android:tag="+380 "
+            android:digits="0123456789"
+            android:maxLength="9" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -113,7 +116,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/skin_type_spinner">
+        app:layout_constraintTop_toBottomOf="@id/skin_type_spinner"
+        android:layout_marginTop="15dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/skin_condition"
