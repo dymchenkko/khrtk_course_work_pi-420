@@ -1,15 +1,20 @@
 package com.example.cosmetologistmanager
 
+import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -50,9 +55,19 @@ class SignUpActivity : AppCompatActivity() {
                             val intent = Intent(this, SignInActivity::class.java)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                            try {
+                                throw it.getException()!!
+                            } catch (e: FirebaseAuthWeakPasswordException) {
+                                Toast.makeText(this, "Слабкий пароль", Toast.LENGTH_SHORT).show()
+                            } catch (e: FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(this, "Невірна електронна пошта", Toast.LENGTH_SHORT).show()
+                            } catch (e: FirebaseAuthUserCollisionException) {
+                                Toast.makeText(this, "Користувач з такою поштою вже існує", Toast.LENGTH_SHORT).show()
 
-                        }
+                            } catch (e: Exception) {
+                                Toast.makeText(this@SignUpActivity, e.message, Toast.LENGTH_SHORT).show()
+                            }
+                  }
                     }
                 } else {
                     Toast.makeText(this, "Паролі не співпадають", Toast.LENGTH_SHORT).show()

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
 import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.example.cosmetologistmanager.databinding.ActivityClientViewBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -79,7 +80,12 @@ class ClientView : AppCompatActivity() {
                 })
         }
 
-
+        binding.listAppointments.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
+            val intent = Intent(this@ClientView, AppointmentView::class.java)
+            intent.putExtra("name", dataArrayList[i].name)
+            intent.putExtra("hash", dataArrayList[i].hash)
+            startActivity(intent)
+        })
         binding.editClient.setOnClickListener {
             val intent = Intent(this, EditClientActivity::class.java)
             intent.putExtra("hash", hash)

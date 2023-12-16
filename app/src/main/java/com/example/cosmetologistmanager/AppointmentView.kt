@@ -40,7 +40,7 @@ class AppointmentView : AppCompatActivity() {
                         binding.appointmentName.setText("Процедура: " + appointment?.procedure)
                         binding.dateTextView.setText("Дата процедури: ${appointment?.day}/${appointment?.month}/${appointment?.year}")
                         binding.timeTextView.setText("Час процедури: ${appointment?.hour}:${appointment?.minute}")
-                        binding.additionalInformationTextView.setText(appointment?.additional_information)
+                        binding.additionalInformationTextView.setText("Додаткова інформація:" + appointment?.additional_information)
 
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid).child(appointment?.client.toString())
                             .get().addOnSuccessListener {

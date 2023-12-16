@@ -81,22 +81,15 @@ class MainActivity : AppCompatActivity() {
                                     snapshot?.key + ""
                                 )
                                 dataArrayList.add(listData)
-                                dataArrayList.sortWith(
-                                    compareBy(
-                                        { it.hour?.toIntOrNull() },
-                                        { it.minute?.toIntOrNull() })
+                                dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
+                                    { it.minute?.toIntOrNull() })
                                 )
 
                             }
-                            listAdapter =
-                                ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
                             Log.d("list of appointments", items.toString())
-                            Log.d(
-                                "appointments",
-                                new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
-                            )
                         }
                     }
 
@@ -132,10 +125,8 @@ class MainActivity : AppCompatActivity() {
                                         snapshot?.key + ""
                                     )
                                     dataArrayList.add(listData)
-                                    dataArrayList.sortWith(
-                                        compareBy(
-                                            { it.hour?.toIntOrNull() },
-                                            { it.minute?.toIntOrNull() })
+                                    dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
+                                        { it.minute?.toIntOrNull() })
                                     )
 
                                 }
@@ -200,15 +191,12 @@ class MainActivity : AppCompatActivity() {
                                     snapshot?.key + ""
                                 )
                                 dataArrayList.add(listData)
-                                dataArrayList.sortWith(
-                                    compareBy(
-                                        { it.hour?.toIntOrNull() },
-                                        { it.minute?.toIntOrNull() })
+                                dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
+                                    { it.minute?.toIntOrNull() })
                                 )
 
                             }
-                            listAdapter =
-                                ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
                             binding.listAppointments.setAdapter(listAdapter)
                             binding.listAppointments.setClickable(true)
                             Log.d("list of appointments", items.toString())
@@ -248,10 +236,8 @@ class MainActivity : AppCompatActivity() {
                                         snapshot?.key + ""
                                     )
                                     dataArrayList.add(listData)
-                                    dataArrayList.sortWith(
-                                        compareBy(
-                                            { it.hour?.toIntOrNull() },
-                                            { it.minute?.toIntOrNull() })
+                                    dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
+                                        { it.minute?.toIntOrNull() })
                                     )
 
                                 }

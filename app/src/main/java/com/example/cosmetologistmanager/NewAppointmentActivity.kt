@@ -1,15 +1,27 @@
 package com.example.cosmetologistmanager
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.cosmetologistmanager.databinding.ActivityNewAppointmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +32,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.security.MessageDigest
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 
@@ -27,7 +41,25 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private lateinit var binding: ActivityNewAppointmentBinding
     private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
-
+    companion object {
+        const val NOTIFICATION_ID = 101
+        const val CHANNEL_ID = "channelID"
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotification() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        val name = "TestChannel"
+        val descriptionText = "TestDescription"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance)
+        channel.description = descriptionText
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +107,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
 
         binding.addNewAppointmentBtn.setOnClickListener {
+
             val procedure_name = binding.newProcedureName.text.toString()
             val date_day = binding.datePickerButton.dayOfMonth.toString()
             val date_month = binding.datePickerButton.month.toString()
@@ -139,5 +172,68 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         ad.setDropDownViewResource(
             android.R.layout.simple_spinner_dropdown_item)
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private fun scheduleNotification(year: Int, month: Int, day: Int, hour: Int, minute:Int)
+    {
+        val intent = Intent(applicationContext, Notification::class.java)
+        val title = "allert"
+        val message = "fewfrewfewef"
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getTime(year, month, day, hour, minute)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+        showAlert(time, title, message)
+
+    }
+    private fun showAlert(time: Long, title: String, message: String)
+    {
+        val date = Date(time)
+        val dateFormat = android.text.format.DateFormat.getLongDateFormat(applicationContext)
+        val timeFormat = android.text.format.DateFormat.getTimeFormat(applicationContext)
+
+        AlertDialog.Builder(this)
+            .setTitle("Notification Scheduled")
+            .setMessage(
+                "Title: " + title +
+                        "\nMessage: " + message +
+                        "\nAt: " + dateFormat.format(date) + " " + timeFormat.format(date))
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
+    }
+
+    private fun getTime(year: Int, month: Int, day: Int, hour: Int, minute:Int): Long
+    {
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month+1, day, hour, minute)
+        return calendar.timeInMillis
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel()
+    {
+        val name = "Notif Channel"
+        val desc = "A Description of the Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelID, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+
     }
 }
