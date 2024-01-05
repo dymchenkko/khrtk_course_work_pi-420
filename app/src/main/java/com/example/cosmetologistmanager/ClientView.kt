@@ -1,5 +1,6 @@
 package com.example.cosmetologistmanager
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -92,14 +93,25 @@ class ClientView : AppCompatActivity() {
             startActivity(intent)
         }
         binding.deleteClient.setOnClickListener {
-            val user = firebaseAuth.currentUser
-            user?.let {
-                var uid = it.uid
-                FirebaseDatabase.getInstance().reference.child("clients").child(uid)
-                    .child(hash.toString()).removeValue()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this@ClientView)
+            builder
+                .setMessage("Ви точно хочете видалити клієнта?")
+                .setTitle("Видалення клієнта")
+                .setPositiveButton("Так") { dialog, which ->
+                    val user = firebaseAuth.currentUser
+                    user?.let {
+                        var uid = it.uid
+                        FirebaseDatabase.getInstance().reference.child("clients").child(uid)
+                            .child(hash.toString()).removeValue()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
 
     }

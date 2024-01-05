@@ -1,13 +1,12 @@
 package com.example.cosmetologistmanager
 
-import android.R
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
+import androidx.fragment.app.DialogFragment
 import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -59,13 +58,24 @@ class AppointmentView : AppCompatActivity() {
             startActivity(intent)
         }
         binding.deleteAppointment.setOnClickListener {
-            val user = firebaseAuth.currentUser
-            user?.let {
-                var uid = it.uid
-                FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(hash.toString()).removeValue()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this@AppointmentView)
+            builder
+                .setMessage("Ви точно хочете видалити запис?")
+                .setTitle("Видалення запису")
+                .setPositiveButton("Так") { dialog, which ->
+                    val user = firebaseAuth.currentUser
+                    user?.let {
+                        var uid = it.uid
+                        FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(hash.toString()).removeValue()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
 
     }
