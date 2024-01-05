@@ -20,7 +20,7 @@
         android:layout_marginTop="50dp"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:text="Новий запис"
+        android:text="Редагувати запис"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.textfield.TextInputLayout

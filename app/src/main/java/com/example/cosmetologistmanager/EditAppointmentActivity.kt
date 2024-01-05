@@ -20,6 +20,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.security.MessageDigest
 import java.util.Calendar
+import java.util.Locale
 
 class EditAppointmentActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -28,10 +29,13 @@ class EditAppointmentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val locale = Locale("UA")
+        Locale.setDefault(locale)
+
         binding = ActivityEditAppointmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val items = mutableListOf<Pair<String, String>>()
+        binding.timePickerButton.setIs24HourView(true);
 
         val intent = this.intent
         if (intent != null) {
