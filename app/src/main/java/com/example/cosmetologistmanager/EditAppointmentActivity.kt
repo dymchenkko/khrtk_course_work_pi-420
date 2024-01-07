@@ -2,11 +2,13 @@ package com.example.cosmetologistmanager
 
 import android.R
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.example.cosmetologistmanager.databinding.ActivityEditAppointmentBinding
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
@@ -19,6 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.security.MessageDigest
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Locale
 
@@ -27,6 +30,7 @@ class EditAppointmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditAppointmentBinding
     private lateinit var database: DatabaseReference
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val locale = Locale("UA")
@@ -45,7 +49,7 @@ class EditAppointmentActivity : AppCompatActivity() {
 
 
             val user = firebaseAuth.currentUser
-            user?.let {
+                user?.let {
                 var uid = it.uid
 
 
@@ -106,7 +110,9 @@ class EditAppointmentActivity : AppCompatActivity() {
                     binding.newAdditionalInformation.setText(appointment.additional_information)
 
                     binding.editAppointmentBtn.setOnClickListener {
-                        FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                        if (validate()) {
+
+                            FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                             .child(hash.toString()).removeValue();
 
                         val procedure_name = binding.newProcedureName.text.toString()
@@ -141,11 +147,13 @@ class EditAppointmentActivity : AppCompatActivity() {
                         val client: String = binding.clientsListSpinner.getSelectedItem().toString()
                         for (pair in items) {
                             if (pair.first == client) {
-                                database.child("appointments").child(uid).child(appointments_hex).child("client").setValue(pair.second)
+                                database.child("appointments").child(uid).child(appointments_hex)
+                                    .child("client").setValue(pair.second)
                             }
                         }
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                    }
                     }
 
                 }.addOnFailureListener {
@@ -155,6 +163,36 @@ class EditAppointmentActivity : AppCompatActivity() {
         }
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun validate(): Boolean {
+
+        val date_day = binding.datePickerButton.dayOfMonth.toString()
+        val date_month = binding.datePickerButton.month.toString()
+        val date_year = binding.datePickerButton.year.toString()
+        val time_hour = binding.timePickerButton.hour.toString()
+        val time_minute = binding.timePickerButton.minute.toString()
+        val procedure_name = binding.newProcedureName.text.toString()
+        if (procedure_name.equals("")){
+            val text = "Поле назви процедури не може бути пустим"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
+        if (isDateTimeInThePast(date_day.toInt(), date_month.toInt(), date_year.toInt(), time_hour.toInt(), time_minute.toInt())
+        ) {
+            val text = "Зверніть увагу, що ви додали дату і час у минулому!"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
+            toast.show()
+        }
+
+        return true
+
+
+}
 
     fun ByteArray.toHex(): String =
         joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
