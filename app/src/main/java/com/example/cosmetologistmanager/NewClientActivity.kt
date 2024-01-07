@@ -41,15 +41,15 @@ class NewClientActivity : AppCompatActivity() {
         }
 
         binding.addNewClientBtn.setOnClickListener {
-            val name = binding.newClientName.text.toString()
-            val surname = binding.newClientSurname.text.toString()
-            val patronymic = binding.newClientPatronymic.text.toString()
-            val phone_number = binding.newPhoneNumber.text.toString()
-            val allergy = binding.newAllergy.text.toString()
-            val skin_condition = binding.skinCondition.text.toString()
+            val name = binding.newClientName.text.toString().trim()
+            val surname = binding.newClientSurname.text.toString().trim()
+            val patronymic = binding.newClientPatronymic.text.toString().trim()
+            val phone_number = binding.newPhoneNumber.text.toString().trim()
+            val allergy = binding.newAllergy.text.toString().trim()
+            val skin_condition = binding.skinCondition.text.toString().trim()
             val skin_type: String = binding.skinTypeSpinner.getSelectedItem().toString()
 
-            val additional_information = binding.newAdditionalInformation.text.toString()
+            val additional_information = binding.newAdditionalInformation.text.toString().trim()
 
             val md5 = MessageDigest.getInstance("md5")
             md5.update((name + surname + patronymic).toByteArray())
@@ -121,9 +121,10 @@ class NewClientActivity : AppCompatActivity() {
     fun validate(): Boolean {
         val regex = Regex("[^\\p{L}]")
 
-        var name = binding.newClientName.text.toString()
-        var surname = binding.newClientSurname.text.toString()
-        var patronymic = binding.newClientPatronymic.text.toString()
+        var name = binding.newClientName.text.toString().trim()
+        var surname = binding.newClientSurname.text.toString().trim()
+        var patronymic = binding.newClientPatronymic.text.toString().trim()
+        var phone_number = binding.newPhoneNumber.text.toString()
 
         if (regex.containsMatchIn(name) || regex.containsMatchIn(surname) || regex.containsMatchIn(
                 patronymic
@@ -144,33 +145,23 @@ class NewClientActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        return true
-    }
-    fun readData(name: String, surname: String, patronymic: String, listener: OnGetDataListener) {
+        else if (surname.equals("")){
+            val text = "Прізвище не може бути пустим"
+            val duration = Toast.LENGTH_SHORT
 
-        val user = firebaseAuth.currentUser
-
-        user?.let {
-            var uid = it.uid
-
-            FirebaseDatabase.getInstance().reference.child("clients").child(uid)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (snapshot in dataSnapshot.children) {
-                            val client: Client? = snapshot.getValue(Client::class.java)
-                            if (client!!.name.equals(name) && client.surname.equals(surname) && client.patronymic.equals(patronymic)) {
-                                listener.onSuccess(false);
-                                break
-                            }
-                        }
-
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-
-                    }
-                })
+            val toast = Toast.makeText(this@NewClientActivity, text, duration)
+            toast.show()
+            return false
         }
+        else if (phone_number.length != 9){
+            val text = "Номер телефону не може бути коротше 9"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@NewClientActivity, text, duration)
+            toast.show()
+            return false
+        }
+        return true
     }
 }
 
