@@ -103,6 +103,27 @@ class ClientView : AppCompatActivity() {
                         var uid = it.uid
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                             .child(hash.toString()).removeValue()
+
+                        FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    for (snapshot in dataSnapshot.children) {
+                                        val appointment: Appointment? = snapshot.getValue(Appointment::class.java)
+                                        Log.d("hash", snapshot?.key+"")
+
+                                        var client_id: String = hash.toString();
+
+                                        if (appointment?.client.toString().equals(client_id)) {
+                                            Log.d("hash", snapshot?.key+"")
+                                            FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(snapshot?.key.toString()).removeValue()
+
+                                        }
+
+                                    }
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {}
+                            })
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }

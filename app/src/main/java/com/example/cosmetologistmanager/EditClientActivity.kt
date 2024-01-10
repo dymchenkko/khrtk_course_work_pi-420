@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.constraintlayout.motion.widget.TransitionBuilder.validate
-import com.example.cosmetologistmanager.databinding.ActivityEditAppointmentBinding
 import com.example.cosmetologistmanager.databinding.ActivityEditClientBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -34,7 +32,7 @@ class EditClientActivity : AppCompatActivity() {
         }
         val intent = this.intent
         if (intent != null) {
-            var hash = intent.getStringExtra("hash")
+            val hash = intent.getStringExtra("hash")
             firebaseAuth = FirebaseAuth.getInstance()
             database = Firebase.database.reference
 
