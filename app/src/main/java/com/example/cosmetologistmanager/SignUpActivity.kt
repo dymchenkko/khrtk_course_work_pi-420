@@ -90,8 +90,8 @@ class SignUpActivity : AppCompatActivity() {
                             user?.let {
                                 var uid = it.uid
                                 Log.d("uid", uid)
-                                database.child(uid).child("email").setValue(email)
-                                database.child(uid).child("password").setValue(pass)
+                                database.child("cosmetologists").child(uid).child("email").setValue(email)
+                                database.child("cosmetologists").child(uid).child("password").setValue(pass)
                             }
                             val intent = Intent(this, SignInActivity::class.java)
                             startActivity(intent)

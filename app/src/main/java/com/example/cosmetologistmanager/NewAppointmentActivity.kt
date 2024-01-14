@@ -100,7 +100,8 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         binding.addNewAppointmentBtn.setOnClickListener {
             val procedure_name = binding.newProcedureName.text.toString()
             val date_day = binding.datePickerButton.dayOfMonth.toString()
-            val date_month = binding.datePickerButton.month.toString()
+            var date_month = binding.datePickerButton.month.toString()
+            date_month = (date_month.toInt() + 1).toString()
             val date_year = binding.datePickerButton.year.toString()
             val time_hour = binding.timePickerButton.hour.toString()
             val time_minute = binding.timePickerButton.minute.toString()
@@ -220,7 +221,8 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     fun validate(): Boolean {
 
         val date_day = binding.datePickerButton.dayOfMonth.toString()
-        val date_month = binding.datePickerButton.month.toString()
+        var date_month = binding.datePickerButton.month.toString()
+        date_month = (date_month.toInt() + 1).toString()
         val date_year = binding.datePickerButton.year.toString()
         val time_hour = binding.timePickerButton.hour.toString()
         val time_minute = binding.timePickerButton.minute.toString()

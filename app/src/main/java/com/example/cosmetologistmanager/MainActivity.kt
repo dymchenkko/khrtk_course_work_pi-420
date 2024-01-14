@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d("hash", snapshot?.key + "")
 
                             if (binding.datePicker.dayOfMonth.toString()
-                                    .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                    .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
                                     .equals(new_appointment!!.month) && binding.datePicker.year.toString()
                                     .equals(new_appointment!!.year)
                             ) {
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                                 Log.d("hash", snapshot?.key + "")
 
                                 if (binding.datePicker.dayOfMonth.toString()
-                                        .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                        .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
                                         .equals(new_appointment!!.month) && binding.datePicker.year.toString()
                                         .equals(new_appointment!!.year)
                                 ) {
@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d("hash", snapshot?.key + "")
 
                             if (binding.datePicker.dayOfMonth.toString()
-                                    .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                    .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
                                     .equals(new_appointment!!.month) && binding.datePicker.year.toString()
                                     .equals(new_appointment!!.year)
                             ) {
@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity() {
                                 Log.d("hash", snapshot?.key + "")
 
                                 if (binding.datePicker.dayOfMonth.toString()
-                                        .equals(new_appointment!!.day) && binding.datePicker.month.toString()
+                                        .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
                                         .equals(new_appointment!!.month) && binding.datePicker.year.toString()
                                         .equals(new_appointment!!.year)
                                 ) {
