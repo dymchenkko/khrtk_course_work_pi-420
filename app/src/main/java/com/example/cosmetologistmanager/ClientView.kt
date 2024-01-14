@@ -116,7 +116,8 @@ class ClientView : AppCompatActivity() {
                                         if (appointment?.client.toString().equals(client_id)) {
                                             Log.d("hash", snapshot?.key+"")
                                             FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(snapshot?.key.toString()).removeValue()
-
+                                            val intent = Intent(this@ClientView, MainActivity::class.java)
+                                            startActivity(intent)
                                         }
 
                                     }
@@ -124,8 +125,7 @@ class ClientView : AppCompatActivity() {
 
                                 override fun onCancelled(databaseError: DatabaseError) {}
                             })
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+
                     }
                 }
                 .setNegativeButton("Ні") { dialog, which ->

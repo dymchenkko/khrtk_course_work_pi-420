@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         val items = mutableListOf<String>()
         dataArrayList = ArrayList<ListAppointmentData>()
         binding.bottomNavigation.setItemIconTintList(null);
+        Log.d("main 0n create", "main_on_create")
 
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             Log.d("itemid", item.itemId.toString())
@@ -166,7 +167,10 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun Resume() {
+    fun initializeCamera() {
+        Log.d("resume", "resumed")
+
+        binding.listAppointments.adapter = null
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
         dataArrayList = ArrayList<ListAppointmentData>()
@@ -180,7 +184,7 @@ class MainActivity : AppCompatActivity() {
                         for (snapshot in dataSnapshot.children) {
                             val new_appointment: Appointment? =
                                 snapshot.getValue(Appointment::class.java)
-                            Log.d("hash", snapshot?.key + "")
+                            Log.d("resume", snapshot?.key + "")
 
                             if (binding.datePicker.dayOfMonth.toString()
                                     .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
