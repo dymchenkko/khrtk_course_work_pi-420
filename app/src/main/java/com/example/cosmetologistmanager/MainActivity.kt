@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun initializeCamera() {
+    fun Resume() {
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
         dataArrayList = ArrayList<ListAppointmentData>()

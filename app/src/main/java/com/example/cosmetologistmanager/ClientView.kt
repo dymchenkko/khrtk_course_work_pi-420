@@ -21,8 +21,8 @@ class ClientView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClientViewBinding.inflate(layoutInflater)
         firebaseAuth = FirebaseAuth.getInstance()
-        var dataArrayList = ArrayList<ListAppointmentData>()
-        var listAdapter: ListAppointmentsAdapter? = null
+        var dataArrayList = ArrayList<ListClientsAppointmentData>()
+        var listAdapter: ListClientsAppointmentsAdapter? = null
 
         setContentView(binding.root)
         var hash: String? = "";
@@ -63,12 +63,12 @@ class ClientView : AppCompatActivity() {
 
                             if (appointment?.client.toString().equals(client_id)) {
                                 Log.d("hash", snapshot?.key+"")
-                                var listData = ListAppointmentData(
-                                    appointment?.procedure.toString(), appointment?.hour+"", appointment?.minute+"", snapshot?.key+""
+                                var listData = ListClientsAppointmentData(
+                                    appointment?.procedure.toString(), appointment?.hour.toString(), appointment?.minute.toString(), appointment?.day.toString(), appointment?.month.toString(), appointment?.year.toString(), snapshot?.key.toString()
                                 )
                                 dataArrayList.add(listData)
                                 dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
-                                listAdapter = ListAppointmentsAdapter(this@ClientView, dataArrayList)
+                                listAdapter = ListClientsAppointmentsAdapter(this@ClientView, dataArrayList)
                                 binding.listAppointments.setAdapter(listAdapter)
                                 binding.listAppointments.setClickable(true)
 

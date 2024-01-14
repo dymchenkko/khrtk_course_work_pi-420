@@ -43,6 +43,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     private lateinit var binding: ActivityNewAppointmentBinding
     private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
+    private var zero_clients = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SuspiciousIndentation")
@@ -77,6 +78,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                             val clients: MutableList<String> =
                                 items.map { it.first }.toMutableList()
+
                             Log.d("clients hash all", "$clients")
 
                             val ad: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -89,6 +91,27 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                             )
                             binding.clientsListSpinner.adapter = ad
                         }
+                        if (items.size == 0) {
+                            items.add(Pair("Немає жодного клієнта",
+                                ""
+                            ))
+                            val clients: MutableList<String> =
+                                items.map { it.first }.toMutableList()
+
+                            Log.d("clients hash all", "$clients")
+
+                            val ad: ArrayAdapter<String> = ArrayAdapter<String>(
+                                this@NewAppointmentActivity,
+                                android.R.layout.simple_spinner_item,
+                                clients
+                            )
+                            ad.setDropDownViewResource(
+                                android.R.layout.simple_spinner_dropdown_item
+                            )
+                            binding.clientsListSpinner.adapter = ad
+                            zero_clients = true
+                        }
+                        Log.d("size", items.size.toString())
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -235,6 +258,14 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             toast.show()
             return false
         }
+        if (zero_clients) {
+            val text = "Ви ще не додали жодного клієнта! Неможливо створити запис без клієнта!"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
         if (isDateTimeInThePast(date_day.toInt(), date_month.toInt(), date_year.toInt(), time_hour.toInt(), time_minute.toInt())
         ) {
             val text = "Зверніть увагу, що ви додали дату і час у минулому!"
@@ -243,6 +274,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)
             toast.show()
         }
+
 
         return true
 
