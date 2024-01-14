@@ -119,14 +119,11 @@ class MainActivity : AppCompatActivity() {
                                         .equals(new_appointment!!.month) && binding.datePicker.year.toString()
                                         .equals(new_appointment!!.year)
                                 ) {
-                                    val age_group =
-                                        if (new_appointment?.minute.toString().length == 1) "0" + new_appointment?.minute.toString() else new_appointment?.minute.toString()
-
                                     var listData = ListAppointmentData(
                                         new_appointment?.procedure.toString(),
-                                        new_appointment?.hour + "",
-                                        new_appointment?.minute + "",
-                                        snapshot?.key + ""
+                                        addLeadingZero(new_appointment?.hour.toString()),
+                                        addLeadingZero(new_appointment?.minute.toString()),
+                                        snapshot?.key.toString()
                                     )
                                     dataArrayList.add(listData)
                                     dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
@@ -164,107 +161,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun initializeCamera() {
-        Log.d("resume", "resumed")
-
-        binding.listAppointments.adapter = null
-        firebaseAuth = FirebaseAuth.getInstance()
-        val items = mutableListOf<String>()
-        dataArrayList = ArrayList<ListAppointmentData>()
-        val user = firebaseAuth.currentUser
-        user?.let {
-            var uid = it.uid
-
-            FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (snapshot in dataSnapshot.children) {
-                            val new_appointment: Appointment? =
-                                snapshot.getValue(Appointment::class.java)
-                            Log.d("resume", snapshot?.key + "")
-
-                            if (binding.datePicker.dayOfMonth.toString()
-                                    .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
-                                    .equals(new_appointment!!.month) && binding.datePicker.year.toString()
-                                    .equals(new_appointment!!.year)
-                            ) {
-                                var listData = ListAppointmentData(
-                                    new_appointment?.procedure.toString(),
-                                    new_appointment?.hour + "",
-                                    new_appointment?.minute + "",
-                                    snapshot?.key + ""
-                                )
-                                dataArrayList.add(listData)
-                                dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
-                                    { it.minute?.toIntOrNull() })
-                                )
-
-                            }
-                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
-                            binding.listAppointments.setAdapter(listAdapter)
-                            binding.listAppointments.setClickable(true)
-                            Log.d("list of appointments", items.toString())
-                            Log.d(
-                                "appointments",
-                                new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
-                            )
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {}
-                })
-        }
-        binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
-            dataArrayList = ArrayList<ListAppointmentData>()
-            val user = firebaseAuth.currentUser
-            user?.let {
-                var uid = it.uid
-
-                FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
-                    .addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            for (snapshot in dataSnapshot.children) {
-                                val new_appointment: Appointment? =
-                                    snapshot.getValue(Appointment::class.java)
-                                Log.d("hash", snapshot?.key + "")
-
-                                if (binding.datePicker.dayOfMonth.toString()
-                                        .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
-                                        .equals(new_appointment!!.month) && binding.datePicker.year.toString()
-                                        .equals(new_appointment!!.year)
-                                ) {
-                                    var listData = ListAppointmentData(
-                                        new_appointment?.procedure.toString(),
-                                        new_appointment?.hour + "",
-                                        new_appointment?.minute + "",
-                                        snapshot?.key + ""
-                                    )
-                                    dataArrayList.add(listData)
-                                    dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
-                                        { it.minute?.toIntOrNull() })
-                                    )
-
-                                }
-                                listAdapter =
-                                    ListAppointmentsAdapter(this@MainActivity, dataArrayList)
-                                binding.listAppointments.setAdapter(listAdapter)
-                                binding.listAppointments.setClickable(true)
-                                Log.d("list of appointments", items.toString())
-                                Log.d(
-                                    "appointments",
-                                    new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
-                                )
-                            }
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {}
-                    })
-            }
-
-        }
-    }
-
 }

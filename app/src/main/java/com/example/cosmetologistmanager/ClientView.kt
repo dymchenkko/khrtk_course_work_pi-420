@@ -40,7 +40,7 @@ class ClientView : AppCompatActivity() {
                         binding.clientName.setText("Ім'я: " + client?.name)
                         binding.clientSurname.setText("Прізвище: " + client?.surname)
                         binding.clientPatronymic.setText("По-батькові: " + client?.patronymic)
-                        binding.clientPhoneNumber.setText("Номер телефону: " + client?.phone_number)
+                        binding.clientPhoneNumber.setText("Номер телефону: +380" + client?.phone_number)
                         binding.clientSkinCondition.setText("Стан шкіри: " + client?.skin_condition)
                         binding.clientSkinType.setText("Тип шкіри: " + client?.skin_type)
                         binding.clientAllergy.setText("Алергія: " + client?.allergy)
@@ -63,11 +63,18 @@ class ClientView : AppCompatActivity() {
 
                             if (appointment?.client.toString().equals(client_id)) {
                                 Log.d("hash", snapshot?.key+"")
+
                                 var listData = ListClientsAppointmentData(
-                                    appointment?.procedure.toString(), appointment?.hour.toString(), appointment?.minute.toString(), appointment?.day.toString(), appointment?.month.toString(), appointment?.year.toString(), snapshot?.key.toString()
+                                    appointment?.procedure.toString(), addLeadingZero(appointment?.hour.toString()), addLeadingZero(appointment?.minute.toString()), addLeadingZero(appointment?.day.toString()), addLeadingZero(appointment?.month.toString()), appointment?.year.toString(), snapshot?.key.toString()
                                 )
                                 dataArrayList.add(listData)
-                                dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() }, { it.minute?.toIntOrNull() }))
+                                dataArrayList.sortWith(compareBy(
+                                    { it.year?.toIntOrNull() },
+                                    { it.month?.toIntOrNull() },
+                                    { it.day?.toIntOrNull() },
+                                    { it.hour?.toIntOrNull() },
+                                    { it.minute?.toIntOrNull() }
+                                ))
                                 listAdapter = ListClientsAppointmentsAdapter(this@ClientView, dataArrayList)
                                 binding.listAppointments.setAdapter(listAdapter)
                                 binding.listAppointments.setClickable(true)
@@ -135,5 +142,12 @@ class ClientView : AppCompatActivity() {
             dialog.show()
         }
 
+    }
+}
+fun addLeadingZero(input: String): String {
+    return if (input.length == 1) {
+        "0$input"
+    } else {
+        input
     }
 }
