@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.AdapterView
 import com.example.cosmetologistmanager.databinding.ActivityClientsBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -45,6 +46,10 @@ class ClientsActivity : AppCompatActivity() {
                             binding.listClients.setAdapter(listAdapter)
                             binding.listClients.setClickable(true)
                             Log.d("list of appointments", items.toString())
+                        }
+
+                        if (dataArrayList.size == 0) {
+                            binding.noClients.visibility = View.VISIBLE
                         }
                     }
 
