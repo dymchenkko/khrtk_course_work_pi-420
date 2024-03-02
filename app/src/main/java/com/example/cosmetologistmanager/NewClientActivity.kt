@@ -115,16 +115,16 @@ class NewClientActivity : AppCompatActivity() {
         }
     }
 
-    fun ByteArray.toHex(): String =
+    private fun ByteArray.toHex(): String =
         joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
 
-    fun validate(): Boolean {
+    private fun validate(): Boolean {
         val regex = Regex("[^\\p{L}]")
 
-        var name = binding.newClientName.text.toString().trim()
-        var surname = binding.newClientSurname.text.toString().trim()
-        var patronymic = binding.newClientPatronymic.text.toString().trim()
-        var phone_number = binding.newPhoneNumber.text.toString()
+        val name = binding.newClientName.text.toString().trim()
+        val surname = binding.newClientSurname.text.toString().trim()
+        val patronymic = binding.newClientPatronymic.text.toString().trim()
+        val phone_number = binding.newPhoneNumber.text.toString()
 
         if (regex.containsMatchIn(name) || regex.containsMatchIn(surname) || regex.containsMatchIn(
                 patronymic
@@ -137,15 +137,14 @@ class NewClientActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        else if (name.equals("")){
+        else if (name == ""){
             val text = "Ім'я не може бути пустим"
             val duration = Toast.LENGTH_SHORT
-
             val toast = Toast.makeText(this@NewClientActivity, text, duration)
             toast.show()
             return false
         }
-        else if (surname.equals("")){
+        else if (surname == ""){
             val text = "Прізвище не може бути пустим"
             val duration = Toast.LENGTH_SHORT
 

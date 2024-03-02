@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         val user = firebaseAuth.currentUser
         user?.let {
-            var uid = it.uid
+            val uid = it.uid
 
             FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                                 dataArrayList.add(listData)
                                 dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
-                                    { it.minute?.toIntOrNull() })
+                                    { it.minute.toIntOrNull() })
                                 )
 
                             }
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             dataArrayList = ArrayList()
             val user = firebaseAuth.currentUser
             user?.let { it ->
-                var uid = it.uid
+                val uid = it.uid
 
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
