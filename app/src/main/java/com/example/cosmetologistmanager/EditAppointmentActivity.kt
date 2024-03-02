@@ -1,6 +1,5 @@
 package com.example.cosmetologistmanager
 
-import android.R
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
@@ -71,7 +70,7 @@ class EditAppointmentActivity : AppCompatActivity() {
                                         items.map { it.first }.toMutableList()
                                     val ad: ArrayAdapter<String> = ArrayAdapter<String>(
                                         this@EditAppointmentActivity,
-                                        R.layout.simple_spinner_item,
+                                        android.R.layout.simple_spinner_item,
                                         clients
                                     )
                                     ad.setDropDownViewResource(
