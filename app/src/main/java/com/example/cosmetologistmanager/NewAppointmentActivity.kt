@@ -22,10 +22,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.security.MessageDigest
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 
@@ -119,7 +116,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val time_hour = binding.timePickerButton.hour.toString()
             val time_minute = binding.timePickerButton.minute.toString()
             val additional_information = binding.newAdditionalInformation.text.toString()
-            if (validate()) {
                 user?.let {
 
                     var uid = it.uid
@@ -144,49 +140,52 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                                 }
 
                                 if (is_unique) {
-                                    var uid = it.uid
-                                    val md5 = MessageDigest.getInstance("md5")
-                                    md5.update((procedure_name + date_day + date_month + date_year + time_hour + time_minute).toByteArray())
+                                    if (validate()) {
 
-                                    val digest: ByteArray = md5.digest()
-                                    val appointments_hex = digest.toHex()
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("procedure").setValue(procedure_name)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("day").setValue(date_day)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("month").setValue(date_month)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("year").setValue(date_year)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("hour").setValue(time_hour)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("minute").setValue(time_minute)
-                                    database.child("appointments").child(uid)
-                                        .child(appointments_hex)
-                                        .child("additional_information")
-                                        .setValue(additional_information)
-                                    val client: String =
-                                        binding.clientsListSpinner.getSelectedItem().toString()
-                                    for (pair in items) {
-                                        if (pair.first == client) {
-                                            database.child("appointments").child(uid)
-                                                .child(appointments_hex).child("client")
-                                                .setValue(pair.second)
+                                        var uid = it.uid
+                                        val md5 = MessageDigest.getInstance("md5")
+                                        md5.update((procedure_name + date_day + date_month + date_year + time_hour + time_minute).toByteArray())
+
+                                        val digest: ByteArray = md5.digest()
+                                        val appointments_hex = digest.toHex()
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("procedure").setValue(procedure_name)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("day").setValue(date_day)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("month").setValue(date_month)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("year").setValue(date_year)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("hour").setValue(time_hour)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("minute").setValue(time_minute)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("additional_information")
+                                            .setValue(additional_information)
+                                        val client: String =
+                                            binding.clientsListSpinner.getSelectedItem().toString()
+                                        for (pair in items) {
+                                            if (pair.first == client) {
+                                                database.child("appointments").child(uid)
+                                                    .child(appointments_hex).child("client")
+                                                    .setValue(pair.second)
+                                            }
                                         }
+                                        val intent =
+                                            Intent(
+                                                this@NewAppointmentActivity,
+                                                MainActivity::class.java
+                                            )
+                                        startActivity(intent)
                                     }
-                                    val intent =
-                                        Intent(
-                                            this@NewAppointmentActivity,
-                                            MainActivity::class.java
-                                        )
-                                    startActivity(intent)
                                 } else {
                                     Toast.makeText(
                                         this@NewAppointmentActivity,
@@ -201,7 +200,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
                         })
                 }
-            }
+
         }
     }
 

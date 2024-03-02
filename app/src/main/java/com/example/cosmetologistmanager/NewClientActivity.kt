@@ -165,7 +165,3 @@ class NewClientActivity : AppCompatActivity() {
     }
 }
 
-interface OnGetDataListener {
-    fun onSuccess(dataSnapshotValue: Boolean)
-}
-

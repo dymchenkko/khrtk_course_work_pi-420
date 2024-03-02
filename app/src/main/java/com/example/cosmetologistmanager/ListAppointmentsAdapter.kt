@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
+@Suppress("NAME_SHADOWING")
 @SuppressLint("ResourceType")
 class ListAppointmentsAdapter(context: Context, dataArrayList: ArrayList<ListAppointmentData>) :
     ArrayAdapter<ListAppointmentData>(
         context, R.layout.list_item,
-        dataArrayList!!
+        dataArrayList
     ) {
+    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view
         val listData = getItem(position)
@@ -23,7 +25,7 @@ class ListAppointmentsAdapter(context: Context, dataArrayList: ArrayList<ListApp
         val listName = view?.findViewById<TextView>(R.id.listName)
         val listTime:TextView = view?.findViewById<TextView>(R.id.listTime) as TextView
         listName?.text = listData!!.name
-        listTime?.text = listData!!.hour + ":" + listData!!.minute
+        listTime.text = listData.hour + ":" + listData.minute
         return view
     }
 }

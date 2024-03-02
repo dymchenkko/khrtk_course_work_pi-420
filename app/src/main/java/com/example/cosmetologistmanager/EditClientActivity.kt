@@ -84,7 +84,7 @@ class EditClientActivity : AppCompatActivity() {
                                     md5.update((name + surname + patronymic + additional_information).toByteArray())
 
                                     val digest: ByteArray = md5.digest()
-                                    val client_hex = digest.toHex()
+                                    val client_hex = hash.toString()
                                     database.child("clients").child(uid).child(client_hex)
                                         .child("name")
                                         .setValue(name)
@@ -138,7 +138,7 @@ class EditClientActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        else if (name.equals("")){
+        else if (name == ""){
             val text = "Ім'я не може бути пустим"
             val duration = Toast.LENGTH_SHORT
 
@@ -146,7 +146,7 @@ class EditClientActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        else if (surname.equals("")){
+        else if (surname == ""){
             val text = "Прізвище не може бути пустим"
             val duration = Toast.LENGTH_SHORT
 
@@ -167,6 +167,4 @@ class EditClientActivity : AppCompatActivity() {
 
     fun ByteArray.toHex(): String =
         joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
-
-
 }

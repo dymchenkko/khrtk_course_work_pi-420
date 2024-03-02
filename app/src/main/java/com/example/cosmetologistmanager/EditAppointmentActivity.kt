@@ -1,6 +1,7 @@
 package com.example.cosmetologistmanager
 
 import android.R
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +10,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.example.cosmetologistmanager.databinding.ActivityEditAppointmentBinding
-import com.example.cosmetologistmanager.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,8 +20,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.security.MessageDigest
-import java.time.LocalDateTime
-import java.util.Calendar
 import java.util.Locale
 
 class EditAppointmentActivity : AppCompatActivity() {
@@ -30,6 +27,7 @@ class EditAppointmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditAppointmentBinding
     private lateinit var database: DatabaseReference
 
+    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +127,7 @@ class EditAppointmentActivity : AppCompatActivity() {
                         md5.update((procedure_name + date_day + date_month + date_year + time_hour + time_minute).toByteArray())
 
                         val digest: ByteArray = md5.digest()
-                        val appointments_hex = digest.toHex()
+                        val appointments_hex = hash.toString()
                         database.child("appointments").child(uid).child(appointments_hex)
                             .child("procedure").setValue(procedure_name)
                         database.child("appointments").child(uid).child(appointments_hex)

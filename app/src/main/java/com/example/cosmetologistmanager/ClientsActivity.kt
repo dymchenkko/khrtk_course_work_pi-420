@@ -59,7 +59,6 @@ class ClientsActivity : AppCompatActivity() {
 
         binding.listClients.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(this@ClientsActivity, ClientView::class.java)
-            intent.putExtra("name", dataArrayList[i].name)
             intent.putExtra("hash", dataArrayList[i].hash)
             startActivity(intent)
         })

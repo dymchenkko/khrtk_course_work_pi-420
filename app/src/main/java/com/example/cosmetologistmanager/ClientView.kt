@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView
-import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.example.cosmetologistmanager.databinding.ActivityClientViewBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -49,7 +48,7 @@ class ClientView : AppCompatActivity() {
                     }
             }
         }
-        user?.let {
+        user?.let { it ->
             var uid = it.uid
 
             FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
@@ -69,11 +68,11 @@ class ClientView : AppCompatActivity() {
                                 )
                                 dataArrayList.add(listData)
                                 dataArrayList.sortWith(compareBy(
-                                    { it.year?.toIntOrNull() },
-                                    { it.month?.toIntOrNull() },
-                                    { it.day?.toIntOrNull() },
-                                    { it.hour?.toIntOrNull() },
-                                    { it.minute?.toIntOrNull() }
+                                    { it.year.toIntOrNull() },
+                                    { it.month.toIntOrNull() },
+                                    { it.day.toIntOrNull() },
+                                    { it.hour.toIntOrNull() },
+                                    { it.minute.toIntOrNull() }
                                 ))
                                 listAdapter = ListClientsAppointmentsAdapter(this@ClientView, dataArrayList)
                                 binding.listAppointments.setAdapter(listAdapter)

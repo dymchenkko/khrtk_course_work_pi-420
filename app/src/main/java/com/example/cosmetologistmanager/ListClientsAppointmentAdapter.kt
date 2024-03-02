@@ -21,12 +21,12 @@ class ListClientsAppointmentsAdapter(context: Context, dataArrayList: ArrayList<
             view = LayoutInflater.from(context).inflate(R.layout.list_item_clients_appointment, parent, false)
         }
         val listName = view?.findViewById<TextView>(R.id.listName)
-        val listTime:TextView = view?.findViewById<TextView>(R.id.listTime) as TextView
-        val listDate:TextView = view?.findViewById<TextView>(R.id.listDate) as TextView
+        val listTime:TextView = view?.findViewById(R.id.listTime) as TextView
+        val listDate:TextView = view.findViewById(R.id.listDate) as TextView
 
         listName?.text = listData!!.name
-        listTime?.text = listData!!.hour + ":" + listData!!.minute
-        listDate?.text = listData!!.day + "/" + listData!!.month + "/" + listData!!.year
+        listTime.text = listData!!.hour + ":" + listData!!.minute
+        listDate.text = listData!!.day + "/" + listData!!.month + "/" + listData!!.year
 
         return view
     }

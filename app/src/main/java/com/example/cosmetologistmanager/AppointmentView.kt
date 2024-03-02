@@ -37,15 +37,19 @@ class AppointmentView : AppCompatActivity() {
                     .child(hash.toString()).get().addOnSuccessListener {
                     var appointment: Appointment? = it.getValue(Appointment::class.java)
                         binding.appointmentName.setText("Процедура: " + appointment?.procedure)
-                        binding.dateTextView.setText("Дата процедури: ${appointment?.day}/${appointment?.month}/${appointment?.year}")
-                        binding.timeTextView.setText("Час процедури: ${appointment?.hour}:${appointment?.minute}")
+                        binding.dateTextView.setText("Дата процедури: ${addLeadingZero(appointment?.day.toString())}/${addLeadingZero(appointment?.month.toString())}/${appointment?.year}")
+                        binding.timeTextView.setText("Час процедури: ${addLeadingZero(appointment?.hour.toString())}:${addLeadingZero(appointment?.minute.toString())}")
                         binding.additionalInformationTextView.setText("Додаткова інформація:" + appointment?.additional_information)
 
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid).child(appointment?.client.toString())
                             .get().addOnSuccessListener {
                                 var client: Client? = it.getValue(Client::class.java)
                                 binding.clientTextView.setText("Клієнт: ${client?.surname} ${client?.name} ${client?.patronymic}")
-
+                                binding.clientTextView.setOnClickListener {
+                                    val intent = Intent(this@AppointmentView, ClientView::class.java)
+                                    intent.putExtra("hash", appointment?.client.toString())
+                                    startActivity(intent)
+                                }
                             }
 
                     }

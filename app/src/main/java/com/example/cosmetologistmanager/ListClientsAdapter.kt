@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
+@Suppress("NAME_SHADOWING")
 @SuppressLint("ResourceType")
 class ListClientsAdapter(context: Context, dataArrayList: ArrayList<ListClientData>) :
     ArrayAdapter<ListClientData>(
         context, R.layout.list_client_item,
-        dataArrayList!!
+        dataArrayList
     ) {
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view

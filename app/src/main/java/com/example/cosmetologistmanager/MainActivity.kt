@@ -1,6 +1,5 @@
 package com.example.cosmetologistmanager
 
-import android.R
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,8 +7,6 @@ import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
 import com.example.cosmetologistmanager.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
@@ -35,24 +32,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
-        dataArrayList = ArrayList<ListAppointmentData>()
+        dataArrayList = ArrayList()
         binding.bottomNavigation.setItemIconTintList(null);
         Log.d("main 0n create", "main_on_create")
 
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
-            Log.d("itemid", item.itemId.toString())
-
-            if (item.itemId == com.example.cosmetologistmanager.R.id.new_client) {
+            if (item.itemId == R.id.new_client) {
                 if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, NewClientActivity::class.java)
                     startActivity(intent)
                 }
-            } else if (item.itemId == com.example.cosmetologistmanager.R.id.new_apointment) {
+            } else if (item.itemId == R.id.new_apointment) {
                 if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, NewAppointmentActivity::class.java)
                     startActivity(intent)
                 }
-            } else if (item.itemId == com.example.cosmetologistmanager.R.id.all_clients) {
+            } else if (item.itemId == R.id.all_clients) {
                 if (firebaseAuth.currentUser != null) {
                     val intent = Intent(this, ClientsActivity::class.java)
                     startActivity(intent)
@@ -80,9 +75,9 @@ class MainActivity : AppCompatActivity() {
                             ) {
                                 var listData = ListAppointmentData(
                                     new_appointment?.procedure.toString(),
-                                    new_appointment?.hour + "",
-                                    new_appointment?.minute + "",
-                                    snapshot?.key + ""
+                                    addLeadingZero(new_appointment?.hour.toString()),
+                                    addLeadingZero(new_appointment?.minute.toString()),
+                                    snapshot?.key.toString()
                                 )
                                 dataArrayList.add(listData)
                                 dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
@@ -101,9 +96,9 @@ class MainActivity : AppCompatActivity() {
                 })
         }
         binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
-            dataArrayList = ArrayList<ListAppointmentData>()
+            dataArrayList = ArrayList()
             val user = firebaseAuth.currentUser
-            user?.let {
+            user?.let { it ->
                 var uid = it.uid
 
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
@@ -112,17 +107,13 @@ class MainActivity : AppCompatActivity() {
                             for (snapshot in dataSnapshot.children) {
                                 val new_appointment: Appointment? =
                                     snapshot.getValue(Appointment::class.java)
-                                Log.d("hash", snapshot?.key + "")
 
-                                if (binding.datePicker.dayOfMonth.toString()
-                                        .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
-                                        .equals(new_appointment!!.month) && binding.datePicker.year.toString()
-                                        .equals(new_appointment!!.year)
+                                if (binding.datePicker.dayOfMonth.toString() == new_appointment!!.day && (binding.datePicker.month + 1).toString() == new_appointment!!.month && binding.datePicker.year.toString() == new_appointment!!.year
                                 ) {
                                     var listData = ListAppointmentData(
-                                        new_appointment?.procedure.toString(),
-                                        addLeadingZero(new_appointment?.hour.toString()),
-                                        addLeadingZero(new_appointment?.minute.toString()),
+                                        new_appointment.procedure.toString(),
+                                        addLeadingZero(new_appointment.hour.toString()),
+                                        addLeadingZero(new_appointment.minute.toString()),
                                         snapshot?.key.toString()
                                     )
                                     dataArrayList.add(listData)

@@ -37,6 +37,7 @@
                 android:id="@+id/new_procedure_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="100"
                 android:hint="Назва процедури" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,6 +129,7 @@
                 android:id="@+id/new_additional_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="300"
                 android:hint="Додаткова інформація"
                 />
         </com.google.android.material.textfield.TextInputLayout>
