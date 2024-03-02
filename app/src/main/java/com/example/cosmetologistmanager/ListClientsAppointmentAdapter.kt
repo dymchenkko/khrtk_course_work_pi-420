@@ -12,7 +12,7 @@ import android.widget.TextView
 class ListClientsAppointmentsAdapter(context: Context, dataArrayList: ArrayList<ListClientsAppointmentData>) :
     ArrayAdapter<ListClientsAppointmentData>(
         context, R.layout.list_item_clients_appointment,
-        dataArrayList!!
+        dataArrayList
     ) {
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view
@@ -25,8 +25,8 @@ class ListClientsAppointmentsAdapter(context: Context, dataArrayList: ArrayList<
         val listDate:TextView = view.findViewById(R.id.listDate) as TextView
 
         listName?.text = listData!!.name
-        listTime.text = listData!!.hour + ":" + listData!!.minute
-        listDate.text = listData!!.day + "/" + listData!!.month + "/" + listData!!.year
+        listTime.text = listData.hour + ":" + listData.minute
+        listDate.text = listData.day + "/" + listData.month + "/" + listData.year
 
         return view
     }

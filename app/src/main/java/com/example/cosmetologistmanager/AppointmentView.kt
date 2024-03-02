@@ -2,11 +2,9 @@ package com.example.cosmetologistmanager
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.example.cosmetologistmanager.databinding.ActivityAppointmentViewBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -31,11 +29,11 @@ class AppointmentView : AppCompatActivity() {
         if (intent != null) {
             val user = firebaseAuth.currentUser
             user?.let {
-                var uid = it.uid
+                val uid = it.uid
                 hash = intent.getStringExtra("hash")
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .child(hash.toString()).get().addOnSuccessListener {
-                    var appointment: Appointment? = it.getValue(Appointment::class.java)
+                    val appointment: Appointment? = it.getValue(Appointment::class.java)
                         binding.appointmentName.setText("Процедура: " + appointment?.procedure)
                         binding.dateTextView.setText("Дата процедури: ${addLeadingZero(appointment?.day.toString())}/${addLeadingZero(appointment?.month.toString())}/${appointment?.year}")
                         binding.timeTextView.setText("Час процедури: ${addLeadingZero(appointment?.hour.toString())}:${addLeadingZero(appointment?.minute.toString())}")
