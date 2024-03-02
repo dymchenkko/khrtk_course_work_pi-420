@@ -9,4 +9,5 @@ class Appointment {
     val minute: String? = null
     val additional_information: String? = null
     val client: String? = null
+    val price: String? = null
 }

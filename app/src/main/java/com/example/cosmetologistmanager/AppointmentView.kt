@@ -38,6 +38,7 @@ class AppointmentView : AppCompatActivity() {
                         binding.dateTextView.setText("Дата процедури: ${addLeadingZero(appointment?.day.toString())}/${addLeadingZero(appointment?.month.toString())}/${appointment?.year}")
                         binding.timeTextView.setText("Час процедури: ${addLeadingZero(appointment?.hour.toString())}:${addLeadingZero(appointment?.minute.toString())}")
                         binding.additionalInformationTextView.setText("Додаткова інформація:" + appointment?.additional_information)
+                        binding.priceTextView.setText("Вартість: ${appointment?.price.toString()} грн.")
 
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid).child(appointment?.client.toString())
                             .get().addOnSuccessListener {
@@ -67,7 +68,7 @@ class AppointmentView : AppCompatActivity() {
                 .setPositiveButton("Так") { dialog, which ->
                     val user = firebaseAuth.currentUser
                     user?.let {
-                        var uid = it.uid
+                        val uid = it.uid
                         FirebaseDatabase.getInstance().reference.child("appointments").child(uid).child(hash.toString()).removeValue()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)

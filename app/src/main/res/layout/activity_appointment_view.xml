@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toTopOf="parent"
         android:text="Appointment Name"
-        android:layout_marginLeft="20dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="16sp"        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -25,13 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="14dp"
-        android:text="Appointment Date"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Appointment Date"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appointment_name"
         tools:ignore="MissingConstraints" />
 
@@ -40,13 +41,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="14dp"
-        android:text="Appointment Time"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Appointment Time"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_text_view"
         tools:ignore="MissingConstraints" />
 
@@ -55,14 +56,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="14dp"
-        android:text="Client"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Client"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/time_text_view"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/price_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="20dp"
+        android:text="Price"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/client_text_view"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -70,14 +86,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="14dp"
-        android:text="Additional information"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Additional information"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/client_text_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_text_view"
         tools:ignore="MissingConstraints" />
 
     <Button

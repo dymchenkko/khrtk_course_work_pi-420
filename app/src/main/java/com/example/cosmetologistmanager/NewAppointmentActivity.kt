@@ -46,7 +46,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         val user = firebaseAuth.currentUser
         user?.let {
-            var uid = it.uid
+            val uid = it.uid
 
             FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -115,10 +115,11 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val date_year = binding.datePickerButton.year.toString()
             val time_hour = binding.timePickerButton.hour.toString()
             val time_minute = binding.timePickerButton.minute.toString()
+            val procedure_price = binding.newAppointmentPrice.text.toString()
             val additional_information = binding.newAdditionalInformation.text.toString()
                 user?.let {
 
-                    var uid = it.uid
+                    val uid = it.uid
                     var is_unique = true
                     FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                         .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -142,7 +143,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                                 if (is_unique) {
                                     if (validate()) {
 
-                                        var uid = it.uid
+                                        val uid = it.uid
                                         val md5 = MessageDigest.getInstance("md5")
                                         md5.update((procedure_name + date_day + date_month + date_year + time_hour + time_minute).toByteArray())
 
@@ -166,6 +167,9 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                                         database.child("appointments").child(uid)
                                             .child(appointments_hex)
                                             .child("minute").setValue(time_minute)
+                                        database.child("appointments").child(uid)
+                                            .child(appointments_hex)
+                                            .child("price").setValue(procedure_price)
                                         database.child("appointments").child(uid)
                                             .child(appointments_hex)
                                             .child("additional_information")
