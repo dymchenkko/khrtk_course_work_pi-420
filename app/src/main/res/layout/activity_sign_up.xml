@@ -21,7 +21,7 @@
             android:id="@+id/emailEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Введіть e-mail"
+            android:hint="Введіть e-mail*"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,7 +41,7 @@
             android:id="@+id/passET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Введіть пароль"
+            android:hint="Введіть пароль*"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +61,7 @@
             android:id="@+id/confirmPassEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Повторіть пароль"
+            android:hint="Повторіть пароль*"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
@@ -78,7 +78,7 @@
         android:id="@+id/big_letter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
+        android:textColor="#f82634"
         android:text="1 велику літеру "
         android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +89,7 @@
         android:id="@+id/one_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
+        android:textColor="#f82634"
         android:text="1 цифру "
         android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +100,7 @@
         android:id="@+id/lenght"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/red"
+        android:textColor="#f82634"
         android:text="довжину 6 символів "
         android:layout_marginHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,8 +115,10 @@
         android:layout_marginHorizontal="16dp"
         android:text="Зарееструватися"
         android:textColor="@color/white"
-        app:backgroundTint="@color/black"
-        android:background="@android:color/white"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textSize="20sp"
+        android:background="@drawable/button_background"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

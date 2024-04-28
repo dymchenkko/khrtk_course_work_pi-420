@@ -69,18 +69,18 @@ class MainActivity : AppCompatActivity() {
                             Log.d("hash", snapshot?.key + "")
 
                             if (binding.datePicker.dayOfMonth.toString()
-                                    .equals(new_appointment!!.day) && (binding.datePicker.month + 1).toString()
-                                    .equals(new_appointment!!.month) && binding.datePicker.year.toString()
-                                    .equals(new_appointment!!.year)
+                                    == new_appointment!!.day && (binding.datePicker.month + 1).toString()
+                                    == new_appointment.month && binding.datePicker.year.toString()
+                                    == new_appointment.year
                             ) {
                                 var listData = ListAppointmentData(
-                                    new_appointment?.procedure.toString(),
-                                    addLeadingZero(new_appointment?.hour.toString()),
-                                    addLeadingZero(new_appointment?.minute.toString()),
+                                    new_appointment.procedure.toString(),
+                                    addLeadingZero(new_appointment.hour.toString()),
+                                    addLeadingZero(new_appointment.minute.toString()),
                                     snapshot?.key.toString()
                                 )
                                 dataArrayList.add(listData)
-                                dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
+                                dataArrayList.sortWith(compareBy({ it.hour.toIntOrNull() },
                                     { it.minute.toIntOrNull() })
                                 )
 
@@ -147,9 +147,63 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("hash", dataArrayList[i].hash)
             startActivity(intent)
         })
+
+        binding.newExpenseButton.setOnClickListener{
+            val intent = Intent(this@MainActivity, NewExpense::class.java)
+            startActivity(intent)
+        }
+
+        binding.newReportButton.setOnClickListener{
+            val intent = Intent(this@MainActivity, NewReport::class.java)
+            startActivity(intent)
+        }
+
         binding.logOutBtn.setOnClickListener {
             val intent = Intent(this, UserAccountActivity::class.java)
             startActivity(intent)
+        }
+    }
+    override fun onRestart() {
+        super.onRestart()
+        dataArrayList = ArrayList()
+        val user = firebaseAuth.currentUser
+        user?.let {
+            val uid = it.uid
+
+            FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (snapshot in dataSnapshot.children) {
+                            val new_appointment: Appointment? =
+                                snapshot.getValue(Appointment::class.java)
+                            Log.d("hash", snapshot?.key + "")
+
+                            if (binding.datePicker.dayOfMonth.toString()
+                                == new_appointment!!.day && (binding.datePicker.month + 1).toString()
+                                == new_appointment.month && binding.datePicker.year.toString()
+                                == new_appointment.year
+                            ) {
+                                var listData = ListAppointmentData(
+                                    new_appointment.procedure.toString(),
+                                    addLeadingZero(new_appointment.hour.toString()),
+                                    addLeadingZero(new_appointment.minute.toString()),
+                                    snapshot?.key.toString()
+                                )
+                                dataArrayList.add(listData)
+                                dataArrayList.sortWith(compareBy({ it.hour.toIntOrNull() },
+                                    { it.minute.toIntOrNull() })
+                                )
+
+                            }
+                            listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
+                            binding.listAppointments.setAdapter(listAdapter)
+                            binding.listAppointments.setClickable(true)
+                            //Log.d("list of appointments", items.toString())
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
         }
     }
 }

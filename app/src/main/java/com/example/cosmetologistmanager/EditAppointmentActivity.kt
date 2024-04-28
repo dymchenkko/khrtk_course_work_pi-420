@@ -60,7 +60,7 @@ class EditAppointmentActivity : AppCompatActivity() {
                                         Log.d("client hash", snapshot?.key.toString())
                                         items.add(
                                             Pair(
-                                                user?.name + " " + user?.surname + " " + user?.patronymic,
+                                                user?.surname + " " + user?.name + " " + user?.patronymic,
                                                 snapshot?.key.toString()
                                             )
                                         )
@@ -99,7 +99,7 @@ class EditAppointmentActivity : AppCompatActivity() {
 
                         binding.timePickerButton.hour = hour!!
                         binding.timePickerButton.minute = minute!!
-                        binding.datePickerButton.init(year, month, day) { view, year, month, day ->
+                        binding.datePickerButton.init(year, month-1, day) { view, year, month, day ->
 
                         }
                         binding.newAdditionalInformation.setText(appointment.additional_information)
@@ -113,7 +113,8 @@ class EditAppointmentActivity : AppCompatActivity() {
 
                                 val procedure_name = binding.newProcedureName.text.toString()
                                 val date_day = binding.datePickerButton.dayOfMonth.toString()
-                                val date_month = binding.datePickerButton.month.toString()
+                                var date_month = binding.datePickerButton.month.toString()
+                                date_month = (date_month.toInt() + 1).toString()
                                 val date_year = binding.datePickerButton.year.toString()
                                 val time_hour = binding.timePickerButton.hour.toString()
                                 val time_minute = binding.timePickerButton.minute.toString()
@@ -153,8 +154,7 @@ class EditAppointmentActivity : AppCompatActivity() {
                                             .setValue(pair.second)
                                     }
                                 }
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
+                                this.finish();
                             }
                         }
 
@@ -170,7 +170,8 @@ class EditAppointmentActivity : AppCompatActivity() {
     fun validate(): Boolean {
 
         val date_day = binding.datePickerButton.dayOfMonth.toString()
-        val date_month = binding.datePickerButton.month.toString()
+        var date_month = binding.datePickerButton.month.toString()
+        date_month = (date_month.toInt() + 1).toString()
         val date_year = binding.datePickerButton.year.toString()
         val time_hour = binding.timePickerButton.hour.toString()
         val time_minute = binding.timePickerButton.minute.toString()
@@ -179,6 +180,22 @@ class EditAppointmentActivity : AppCompatActivity() {
 
         if (procedure_name == "") {
             val text = "Поле назви процедури не може бути пустим"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
+        if (procedure_price.equals("")){
+            val text = "Поле ціни не може бути пустим"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
+        if (procedure_price?.toInt()!! < 0){
+            val text = "Ціна процедури не може бути від'ємною"
             val duration = Toast.LENGTH_LONG
 
             val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)

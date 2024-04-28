@@ -22,7 +22,7 @@ class ListClientsAdapter(context: Context, dataArrayList: ArrayList<ListClientDa
             view = LayoutInflater.from(context).inflate(R.layout.list_client_item, parent, false)
         }
         val listName = view?.findViewById<TextView>(R.id.clientName)
-        listName?.text = listData!!.name + " " + listData!!.surname + " " + listData!!.patronymic.toString()
+        listName?.text = listData!!.surname + " " + listData!!.name  + " " + listData!!.patronymic.toString()
         return view!!
     }
 }

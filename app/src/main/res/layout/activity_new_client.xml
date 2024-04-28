@@ -34,7 +34,7 @@
             android:id="@+id/new_client_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ім'я"
+            android:hint="Ім'я*"
             android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,7 +52,7 @@
             android:id="@+id/new_client_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Прізвище"
+            android:hint="Прізвище*"
             android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,7 +70,7 @@
             android:id="@+id/new_client_patronymic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="По-батькові"
+            android:hint="По-батькові*"
             android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,7 +88,7 @@
             android:id="@+id/new_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="номер телефону"
+            android:hint="номер телефону*"
             android:inputType="phone"
             android:tag="+380 "
             android:digits="0123456789"
@@ -176,14 +176,16 @@
             android:maxLength="300" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_new_client_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:background="@android:color/white"
         android:text="Додати клієнта"
-        app:backgroundTint="@color/black"
+        android:background="@drawable/button_background"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

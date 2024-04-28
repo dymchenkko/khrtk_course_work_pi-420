@@ -9,7 +9,9 @@
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,8 +22,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/listName"
             android:text="Name"
-            android:textSize="20sp"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#f82634"
             android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
             android:layout_marginStart="30dp"/>
 
         <TextView

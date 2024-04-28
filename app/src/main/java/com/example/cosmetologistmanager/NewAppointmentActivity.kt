@@ -56,7 +56,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                             Log.d("client hash", snapshot?.key.toString())
                             items.add(
                                 Pair(
-                                    user?.name + " " + user?.surname + " " + user?.patronymic,
+                                    user?.surname + " " + user?.name + " " + user?.patronymic,
                                     snapshot?.key.toString()
                                 )
                             )
@@ -243,8 +243,25 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val time_hour = binding.timePickerButton.hour.toString()
         val time_minute = binding.timePickerButton.minute.toString()
         val procedure_name = binding.newProcedureName.text.toString()
+        val procedure_price = binding.newAppointmentPrice.text.toString()
         if (procedure_name.equals("")){
             val text = "Поле назви процедури не може бути пустим"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
+        if (procedure_price.equals("")){
+            val text = "Поле ціни не може бути пустим"
+            val duration = Toast.LENGTH_LONG
+
+            val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)
+            toast.show()
+            return false
+        }
+        if (procedure_price?.toInt()!! < 0){
+            val text = "Ціна процедури не може бути від'ємною"
             val duration = Toast.LENGTH_LONG
 
             val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)

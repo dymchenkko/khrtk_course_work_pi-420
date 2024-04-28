@@ -39,7 +39,7 @@
                 android:id="@+id/new_procedure_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Назва процедури"
+                android:hint="Назва процедури*"
                 android:maxLength="100" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,16 +87,17 @@
             android:timePickerMode="spinner"
             app:layout_constraintTop_toBottomOf="@+id/appointment_time" />
 
-        <Button
-
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/add_new_appointment_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
-            android:background="@android:color/white"
+            android:background="@drawable/button_background"
+            android:layout_marginHorizontal="16dp"
             android:text="Додати новий запис"
-            app:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -131,7 +132,7 @@
                 android:id="@+id/new_appointment_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ціна (у гривнях)"
+                android:hint="Ціна (у гривнях)*"
                 android:inputType="numberDecimal"
                 android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>

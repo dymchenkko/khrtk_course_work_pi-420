@@ -36,9 +36,9 @@ class ClientView : AppCompatActivity() {
                 FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                     .child(hash.toString()).get().addOnSuccessListener {
                         var client: Client? = it.getValue(Client::class.java)
-                        binding.clientName.setText("Ім'я: " + client?.name)
-                        binding.clientSurname.setText("Прізвище: " + client?.surname)
-                        binding.clientPatronymic.setText("По-батькові: " + client?.patronymic)
+                        binding.clientName.setText("" + client?.name)
+                        binding.clientSurname.setText("" + client?.surname)
+                        binding.clientPatronymic.setText("" + client?.patronymic)
                         binding.clientPhoneNumber.setText("Номер телефону: +380" + client?.phone_number)
                         binding.clientSkinCondition.setText("Стан шкіри: " + client?.skin_condition)
                         binding.clientSkinType.setText("Тип шкіри: " + client?.skin_type)
