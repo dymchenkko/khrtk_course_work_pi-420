@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -102,7 +103,7 @@ class NewExpense : AppCompatActivity() {
         val expense_name = binding.newExpenseName.text.toString()
         val expense_price = binding.newExpensePrice.text.toString()
 
-        if (expense_name.equals("")){
+        if (expense_name.equals("")) {
             val text = "Поле назви витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -110,7 +111,7 @@ class NewExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (expense_price.equals("")){
+        if (expense_price.equals("")) {
             val text = "Поле ціни витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -118,7 +119,7 @@ class NewExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (isFutureDate(date_day?.toInt()!!, date_month?.toInt()!!, date_year?.toInt()!!)){
+        if (isFutureDate(date_day?.toInt()!!, date_month?.toInt()!!, date_year?.toInt()!!)) {
             val text = "Дата витрати не може бути у майбутньому"
             val duration = Toast.LENGTH_LONG
 
@@ -130,21 +131,36 @@ class NewExpense : AppCompatActivity() {
         return true
 
     }
+
     override fun onBackPressed() {
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder
-            .setMessage("Ви точно хочете закінчити додавання нової витрати?")
-            .setTitle("Дані не будуть збережені")
-            .setPositiveButton("Так") { dialog, which ->
-                this.finish()
-            }
-            .setNegativeButton("Ні") { dialog, which ->
-            }
+        if (wasTheInformationChanged()) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder
+                .setMessage("Ви точно хочете закінчити додавання нової витрати?")
+                .setTitle("Дані не будуть збережені")
+                .setPositiveButton("Так") { dialog, which ->
+                    this.finish()
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
 
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+        else {
+            this.finish()
+        }
+    }
+    fun wasTheInformationChanged(): Boolean {
+        var changed = false
+        val expense_name = binding.newExpenseName.text.toString().trim()
+        val procedure_price = binding.newExpensePrice.text.toString()
+        if (expense_name != "" ||
+            procedure_price != "" ) {
+            changed = true
+        }
+        return changed
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun isFutureDate(day: Int, month: Int, year: Int): Boolean {

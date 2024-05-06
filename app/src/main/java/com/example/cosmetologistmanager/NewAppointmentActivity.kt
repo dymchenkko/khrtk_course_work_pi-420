@@ -211,7 +211,26 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         }
     }
+    fun wasTheInformationChanged(): Boolean {
+        var changed = false
+        val procedure_name = binding.newProcedureName.text.toString().trim()
+        val additional_information =
+            binding.newAdditionalInformation.text.toString().trim()
+        val procedure_price = binding.newAppointmentPrice.text.toString().trim()
+        val client: String =
+            binding.clientsListSpinner.getSelectedItem().toString()
+        Log.e("client", client)
 
+        if (procedure_name != "" ||
+            additional_information != "" ||
+            procedure_price != "") {
+            Log.e("not equeal", "not equal")
+            changed = true
+        }
+        Log.e("changed", changed.toString())
+
+        return changed
+    }
     override fun onNothingSelected(parent: AdapterView<*>?) {
         showToast(message = "Nothing selected")
     }
@@ -301,19 +320,23 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     }
 
     override fun onBackPressed() {
+        if (wasTheInformationChanged()) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this@NewAppointmentActivity)
+            builder
+                .setMessage("Ви точно хочете закінчити додавання нового запису?")
+                .setTitle("Дані не будуть збережені")
+                .setPositiveButton("Так") { dialog, which ->
+                    this.finish()
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this@NewAppointmentActivity)
-        builder
-            .setMessage("Ви точно хочете закінчити додавання нового запису?")
-            .setTitle("Дані не будуть збережені")
-            .setPositiveButton("Так") { dialog, which ->
-                this.finish()
-            }
-            .setNegativeButton("Ні") { dialog, which ->
-            }
-
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+        else {
+            this.finish()
+        }
 
     }
 }

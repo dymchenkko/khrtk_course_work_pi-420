@@ -1,5 +1,6 @@
 package com.example.cosmetologistmanager
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -141,6 +142,33 @@ class ClientView : AppCompatActivity() {
             dialog.show()
         }
 
+    }
+    override fun onRestart() {
+        super.onRestart()
+        var hash: String? = "";
+
+        val intent = this.intent
+        val user = firebaseAuth.currentUser
+
+        if (intent != null) {
+            user?.let {
+                var uid = it.uid
+                hash = intent.getStringExtra("hash")
+                FirebaseDatabase.getInstance().reference.child("clients").child(uid)
+                    .child(hash.toString()).get().addOnSuccessListener {
+                        var client: Client? = it.getValue(Client::class.java)
+                        binding.clientName.text = client?.name
+                        binding.clientSurname.text = client?.surname
+                        binding.clientPatronymic.text = client?.patronymic
+                        binding.clientPhoneNumber.text = "Номер телефону: +380" + client?.phone_number
+                        binding.clientSkinCondition.text = "Стан шкіри: " + client?.skin_condition
+                        binding.clientSkinType.text = "Тип шкіри: " + client?.skin_type
+                        binding.clientAllergy.text = "Алергія: " + client?.allergy
+                        binding.additionalInformationTextView.text = "Додаткова інформація: " + client?.additional_information
+
+                    }
+            }
+        }
     }
 }
 fun addLeadingZero(input: String): String {

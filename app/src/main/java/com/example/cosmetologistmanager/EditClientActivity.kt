@@ -110,9 +110,9 @@ class EditClientActivity : AppCompatActivity() {
                                         .child("skin_type").setValue(skin_type)
                                     database.child("clients").child(uid).child(client_hex)
                                         .child("allergy").setValue(allergy)
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    startActivity(intent)
-                                }
+                                        this.finish()
+
+                                    }
                             }
 
                         }.addOnFailureListener {

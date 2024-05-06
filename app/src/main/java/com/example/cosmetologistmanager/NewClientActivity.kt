@@ -116,20 +116,47 @@ class NewClientActivity : AppCompatActivity() {
         }
     }
     override fun onBackPressed() {
+        if (wasTheInformationChanged()) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder
+                .setMessage("Ви точно хочете закінчити додавання нового клієнта?")
+                .setTitle("Дані не будуть збережені")
+                .setPositiveButton("Так") { dialog, which ->
+                    this.finish()
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder
-            .setMessage("Ви точно хочете закінчити додавання нового клієнта?")
-            .setTitle("Дані не будуть збережені")
-            .setPositiveButton("Так") { dialog, which ->
-                this.finish()
-            }
-            .setNegativeButton("Ні") { dialog, which ->
-            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+        else {
+            this.finish()
+        }
 
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-
+    }
+    fun wasTheInformationChanged(): Boolean {
+        var changed = false
+        val name = binding.newClientName.text.toString().trim()
+        val surname = binding.newClientSurname.text.toString().trim()
+        val patronymic =
+            binding.newClientPatronymic.text.toString().trim()
+        val phone_number = binding.newPhoneNumber.text.toString().trim()
+        val allergy = binding.newAllergy.text.toString().trim()
+        val skin_condition =
+            binding.skinCondition.text.toString().trim()
+        val additional_information =
+            binding.newAdditionalInformation.text.toString().trim()
+        if (name != ""||
+            surname != ""||
+            patronymic != ""||
+            phone_number != ""||
+            allergy != ""||
+            skin_condition != ""||
+            additional_information != "") {
+            changed = true
+        }
+        return changed
     }
     private fun ByteArray.toHex(): String =
         joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
