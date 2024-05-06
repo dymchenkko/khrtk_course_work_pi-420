@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.example.cosmetologistmanager.databinding.ActivityEditExpenseBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -25,6 +26,8 @@ class EditExpense : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding: ActivityEditExpenseBinding
     private lateinit var database: DatabaseReference
+    private var hash = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class EditExpense : AppCompatActivity() {
 
         val intent = this.intent
         if (intent != null) {
-            var hash = intent.getStringExtra("hash")
+            hash = intent.getStringExtra("hash").toString()
             firebaseAuth = FirebaseAuth.getInstance()
             database = Firebase.database.reference
 
@@ -46,7 +49,7 @@ class EditExpense : AppCompatActivity() {
                 val uid = it.uid
 
                 FirebaseDatabase.getInstance().reference.child("expenses").child(uid)
-                    .child(hash.toString()).get().addOnSuccessListener {
+                    .child(hash).get().addOnSuccessListener {
                         var expense: Expense? = it.getValue(Expense::class.java)
                         val year = expense?.year?.toInt()!!
                         val month = expense.month?.toInt()!!
@@ -60,13 +63,13 @@ class EditExpense : AppCompatActivity() {
                         binding.editExpense.setOnClickListener {
                             if (validate()) {
                                 FirebaseDatabase.getInstance().reference.child("expenses")
-                                    .child(uid).child(hash.toString()).removeValue();
-                                val expense_name = binding.editExpenseName.text.toString()
-                                val date_day = binding.datePickerButton.dayOfMonth.toString()
-                                var date_month = binding.datePickerButton.month.toString()
-                                date_month = (date_month.toInt() + 1).toString()
-                                val date_year = binding.datePickerButton.year.toString()
-                                val procedure_price = binding.editExpensePrice.text.toString()
+                                    .child(uid).child(hash).removeValue();
+                                val expense_name = binding.editExpenseName.text.toString().trim()
+                                val date_day = binding.datePickerButton.dayOfMonth.toString().trim()
+                                var date_month = binding.datePickerButton.month.toString().trim()
+                                date_month = (date_month.toInt() + 1).toString().trim()
+                                val date_year = binding.datePickerButton.year.toString().trim()
+                                val procedure_price = binding.editExpensePrice.text.toString().trim()
                                 val md5 = MessageDigest.getInstance("md5")
                                 md5.update((expense_name + date_day + date_month + date_year).toByteArray())
 
@@ -97,6 +100,52 @@ class EditExpense : AppCompatActivity() {
                     }
             }
         }
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val user = firebaseAuth.currentUser
+        val uid = user?.uid.toString()
+        FirebaseDatabase.getInstance().reference.child("expenses").child(uid)
+            .child(hash).get().addOnSuccessListener {
+                var expense: Expense = it.getValue(Expense::class.java)!!
+                if (wasTheInformationChanged(expense)) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditExpense)
+                    builder
+                        .setMessage("Ви точно хочете закінчити редагування?")
+                        .setTitle("Дані не збережені і інформація не буде оновлена.")
+                        .setPositiveButton("Так") { dialog, which ->
+                            this.finish()
+                        }
+                        .setNegativeButton("Ні") { dialog, which ->
+                        }
+
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                }
+                else {
+                    this.finish()
+                }
+            }.addOnFailureListener {
+                Log.e("firebase", "Error getting data", it)
+            }
+
+    }
+    fun wasTheInformationChanged(expense: Expense): Boolean {
+        var changed = false
+        val expense_name = binding.editExpenseName.text.toString().trim()
+        val date_day = binding.datePickerButton.dayOfMonth.toString().trim()
+        var date_month = binding.datePickerButton.month.toString().trim()
+        date_month = (date_month.toInt() + 1).toString().trim()
+        val date_year = binding.datePickerButton.year.toString().trim()
+        val procedure_price = binding.editExpensePrice.text.toString()
+        if (expense?.name != expense_name ||
+            expense?.day != date_day ||
+            expense?.month != date_month ||
+            expense.year != date_year ||
+            expense.price != procedure_price) {
+            changed = true
+        }
+        return changed
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun validate(): Boolean {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.example.cosmetologistmanager.databinding.ActivityNewExpenseBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -127,6 +128,22 @@ class NewExpense : AppCompatActivity() {
         }
 
         return true
+
+    }
+    override fun onBackPressed() {
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("Ви точно хочете закінчити додавання нової витрати?")
+            .setTitle("Дані не будуть збережені")
+            .setPositiveButton("Так") { dialog, which ->
+                this.finish()
+            }
+            .setNegativeButton("Ні") { dialog, which ->
+            }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
 
     }
     @RequiresApi(Build.VERSION_CODES.O)

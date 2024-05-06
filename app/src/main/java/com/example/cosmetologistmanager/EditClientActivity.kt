@@ -1,11 +1,13 @@
 package com.example.cosmetologistmanager
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.cosmetologistmanager.databinding.ActivityEditClientBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -18,6 +20,9 @@ class EditClientActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding: ActivityEditClientBinding
     private lateinit var database: DatabaseReference
+    private var hash = ""
+
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditClientBinding.inflate(layoutInflater)
@@ -32,7 +37,7 @@ class EditClientActivity : AppCompatActivity() {
         }
         val intent = this.intent
         if (intent != null) {
-            val hash = intent.getStringExtra("hash")
+            hash = intent.getStringExtra("hash").toString()
             firebaseAuth = FirebaseAuth.getInstance()
             database = Firebase.database.reference
 
@@ -42,7 +47,7 @@ class EditClientActivity : AppCompatActivity() {
                     var uid = it.uid
 
                     FirebaseDatabase.getInstance().reference.child("clients").child(uid)
-                        .child(hash.toString()).get().addOnSuccessListener {
+                        .child(hash).get().addOnSuccessListener {
                             var client: Client? = it.getValue(Client::class.java)
 
                             binding.newClientName.setText(client?.name)
@@ -119,6 +124,62 @@ class EditClientActivity : AppCompatActivity() {
 
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val user = firebaseAuth.currentUser
+        val uid = user?.uid.toString()
+        FirebaseDatabase.getInstance().reference.child("clients").child(uid)
+            .child(hash).get().addOnSuccessListener {
+                var client: Client = it.getValue(Client::class.java)!!
+                if (wasTheInformationChanged(client)) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditClientActivity)
+                    builder
+                        .setMessage("Ви точно хочете закінчити редагування?")
+                        .setTitle("Дані не збережені і інформація не буде оновлена.")
+                        .setPositiveButton("Так") { dialog, which ->
+                            this.finish()
+                        }
+                        .setNegativeButton("Ні") { dialog, which ->
+                        }
+
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                }
+                else {
+                    this.finish()
+                }
+            }.addOnFailureListener {
+                Log.e("firebase", "Error getting data", it)
+            }
+
+    }
+    @SuppressLint("SuspiciousIndentation")
+    fun wasTheInformationChanged(client: Client): Boolean {
+        var changed = false
+        val name = binding.newClientName.text.toString().trim()
+        val surname = binding.newClientSurname.text.toString().trim()
+        val patronymic =
+            binding.newClientPatronymic.text.toString().trim()
+        val phone_number = binding.newPhoneNumber.text.toString().trim()
+        val allergy = binding.newAllergy.text.toString().trim()
+        val skin_condition =
+            binding.skinCondition.text.toString().trim()
+        val skin_type: String =
+            binding.skinTypeSpinner.getSelectedItem().toString().trim()
+        val additional_information =
+            binding.newAdditionalInformation.text.toString().trim()
+                if (client?.name != name ||
+                    client?.surname != surname ||
+                    client?.patronymic != patronymic ||
+                    client.phone_number != phone_number ||
+                    client.allergy != allergy ||
+                    client.skin_condition != skin_condition ||
+                    client.skin_type != skin_type ||
+                    client.additional_information != additional_information) {
+                    changed = true
+                }
+        return changed
+    }
     fun validate(): Boolean {
         val regex = Regex("[^\\p{L}]")
 

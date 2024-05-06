@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivityNewClientBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -114,7 +115,22 @@ class NewClientActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onBackPressed() {
 
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("Ви точно хочете закінчити додавання нового клієнта?")
+            .setTitle("Дані не будуть збережені")
+            .setPositiveButton("Так") { dialog, which ->
+                this.finish()
+            }
+            .setNegativeButton("Ні") { dialog, which ->
+            }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }
     private fun ByteArray.toHex(): String =
         joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
 

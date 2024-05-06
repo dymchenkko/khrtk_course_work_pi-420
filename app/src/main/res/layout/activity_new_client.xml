@@ -175,6 +175,18 @@
             android:hint="Додаткова інформація"
             android:maxLength="300" />
     </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/asterix_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="* обов'язкові поля"
+        android:textSize="15dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#fa7d6f"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_additional_information_layout"
+        tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_new_client_btn"

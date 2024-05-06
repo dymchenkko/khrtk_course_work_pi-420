@@ -1,14 +1,15 @@
 package com.example.cosmetologistmanager
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.cosmetologistmanager.databinding.ActivityEditAppointmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -18,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.security.MessageDigest
 import java.util.Locale
 
@@ -25,6 +28,8 @@ class EditAppointmentActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding: ActivityEditAppointmentBinding
     private lateinit var database: DatabaseReference
+    private var hash = ""
+    private var items = mutableListOf<Pair<String, String>>()
 
     @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -35,12 +40,11 @@ class EditAppointmentActivity : AppCompatActivity() {
 
         binding = ActivityEditAppointmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val items = mutableListOf<Pair<String, String>>()
         binding.timePickerButton.setIs24HourView(true);
 
         val intent = this.intent
         if (intent != null) {
-            var hash = intent.getStringExtra("hash")
+            hash = intent.getStringExtra("hash")!!
             firebaseAuth = FirebaseAuth.getInstance()
             database = Firebase.database.reference
 
@@ -50,7 +54,7 @@ class EditAppointmentActivity : AppCompatActivity() {
                 val uid = it.uid
 
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
-                    .child(hash.toString()).get().addOnSuccessListener {
+                    .child(hash).get().addOnSuccessListener {
                         var appointment: Appointment? = it.getValue(Appointment::class.java)
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -165,8 +169,94 @@ class EditAppointmentActivity : AppCompatActivity() {
         }
 
     }
+    override fun onBackPressed() {
+        val user = firebaseAuth.currentUser
+        val uid = user?.uid.toString()
+       FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
+            .child(hash).get().addOnSuccessListener {
+                var appointment: Appointment = it.getValue(Appointment::class.java)!!
+        if (wasTheInformationChanged(appointment)) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditAppointmentActivity)
+            builder
+                .setMessage("Ви точно хочете закінчити редагування?")
+                .setTitle("Дані не збережені і інформація не буде оновлена.")
+                .setPositiveButton("Так") { dialog, which ->
+                    this.finish()
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+        else {
+            this.finish()
+        }
+        }.addOnFailureListener {
+            Log.e("firebase", "Error getting data", it)
+        }
+
+    }
+
+    fun wasTheInformationChanged(appointment: Appointment): Boolean {
+        var changed = false
+        firebaseAuth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
+        val procedure_name = binding.newProcedureName.text.toString()
+                    val date_day = binding.datePickerButton.dayOfMonth.toString()
+                    var date_month = binding.datePickerButton.month.toString()
+                    date_month = (date_month.toInt() + 1).toString()
+                    val date_year = binding.datePickerButton.year.toString()
+                    val time_hour = binding.timePickerButton.hour.toString()
+                    val time_minute = binding.timePickerButton.minute.toString()
+                    val additional_information =
+                        binding.newAdditionalInformation.text.toString()
+                    val procedure_price = binding.editAppointmentPrice.text.toString()
+                    val client: String =
+                        binding.clientsListSpinner.getSelectedItem().toString()
+                    Log.e("client", client)
+                    Log.e("items len", items.size.toString())
+
+                    for (pair in items) {
+                        if (pair.first == client) {
+                            Log.e("current item", pair.first)
+                            Log.e("appointment procedure", appointment?.procedure.toString())
+                            Log.e("current procedure", procedure_name)
+                            Log.e("appointment day", appointment?.day.toString())
+                            Log.e("current day", date_day)
+                            Log.e("appointment month", appointment?.month.toString())
+                            Log.e("current month", date_month)
+                            Log.e("appointment year", appointment?.year.toString())
+                            Log.e("current year", date_year)
+                            Log.e("appointment hour", appointment?.hour.toString())
+                            Log.e("current hour", time_hour)
+                            Log.e("appointment minute", appointment?.minute.toString())
+                            Log.e("current minute", time_minute)
+                            Log.e("appointment additional_information", appointment?.additional_information.toString())
+                            Log.e("current additional_information", additional_information)
+                            Log.e("appointment price", appointment?.price.toString())
+                            Log.e("current price", procedure_price)
+                            Log.e("appointment client", appointment?.client.toString())
+                            Log.e("current client", pair.second)
+                            if (appointment?.procedure != procedure_name ||
+                                appointment?.day != date_day ||
+                                appointment?.month != date_month ||
+                                appointment.year != date_year ||
+                                appointment.hour != time_hour ||
+                                appointment.minute != time_minute ||
+                                appointment.additional_information != additional_information ||
+                                appointment.price != procedure_price ||
+                                appointment.client != pair.second) {
+                                Log.e("not equeal", "not equal")
+                                changed = true
+                            }
+                        }
+                    }
+            Log.e("changed", changed.toString())
+
+            return changed
+    }
+        @RequiresApi(Build.VERSION_CODES.O)
     fun validate(): Boolean {
 
         val date_day = binding.datePickerButton.dayOfMonth.toString()
