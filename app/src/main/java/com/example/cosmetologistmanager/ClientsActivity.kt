@@ -3,6 +3,8 @@ package com.example.cosmetologistmanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -17,6 +19,8 @@ class ClientsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClientsBinding
     private lateinit var firebaseAuth: FirebaseAuth
     var dataArrayList = ArrayList<ListClientData>()
+    private val filteredList: ArrayList<ListClientData> = ArrayList()
+
     var listAdapter: ListClientsAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,5 +66,43 @@ class ClientsActivity : AppCompatActivity() {
             intent.putExtra("hash", dataArrayList[i].hash)
             startActivity(intent)
         })
+
+        binding.searchClient.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateFilteredList(s.toString())
+                listAdapter = ListClientsAdapter(this@ClientsActivity, filteredList)
+                binding.listClients.setAdapter(listAdapter)
+                binding.listClients.setClickable(true)
+                binding.listClients.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                    val intent = Intent(this@ClientsActivity, ClientView::class.java)
+                    intent.putExtra("hash", filteredList[i].hash)
+                    startActivity(intent)
+                })
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+    }
+
+    private fun updateFilteredList(text: String) {
+        // Clear previous filteredList
+        filteredList.clear()
+
+        // Filter originalList based on the text entered
+        dataArrayList.forEach { clientData ->
+            if (clientData.name.contains(text, ignoreCase = true) ||
+                clientData.surname.contains(text, ignoreCase = true) ||
+                clientData.patronymic.contains(text, ignoreCase = true)
+            ) {
+                filteredList.add(clientData)
+            }
+        }
+
+        // Now you have the filtered list, you can use it as needed
+        // For example, update your RecyclerView adapter if you're using one
     }
 }

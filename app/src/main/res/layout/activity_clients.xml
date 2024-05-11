@@ -6,14 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ClientsActivity">
 
+<EditText
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:hint="Пошук"
+    android:id="@+id/search_client"
+    android:layout_width="match_parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_height="50dp"/>
     <ListView
         android:id="@+id/list_clients"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:textSize="30sp"
         android:textColor="@color/black"
         tools:listitem="@layout/list_item"
-
+        app:layout_constraintTop_toBottomOf="@+id/search_client"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="10dp"
