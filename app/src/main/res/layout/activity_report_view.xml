@@ -6,13 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ReportView">
 
+    <Spinner
+        android:id="@+id/sort_incomes_expenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"/>
+    <Spinner
+        android:id="@+id/extra_sort"
+        app:layout_constraintTop_toBottomOf="@id/sort_incomes_expenses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints"
+        android:layout_margin="20dp"/>
+
     <ListView
         android:id="@+id/list_review"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
-
         android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/extra_sort"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,9 +39,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:background="@color/white"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button_background"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="Всього дохід"
-        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/expense_sum"
         app:layout_constraintRight_toRightOf="parent" />
@@ -36,9 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:background="@color/white"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button_background"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="Всього витрат"
-        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/res"
         app:layout_constraintRight_toRightOf="parent" />
@@ -49,9 +72,12 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/white"
+        android:background="@drawable/button_background"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="Результат"
-        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -62,6 +88,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
         android:scaleType="fitXY"
         android:src="@drawable/download"
         app:layout_constraintBottom_toBottomOf="parent"
