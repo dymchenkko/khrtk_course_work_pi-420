@@ -57,8 +57,8 @@ class NewReport : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun isEarlierOrSame(day1: Int, month1: Int, year1: Int, day2: Int, month2: Int, year2: Int): Boolean {
-        val date1 = LocalDate.of(year1, month1, day1)
-        val date2 = LocalDate.of(year2, month2, day2)
+        val date1 = LocalDate.of(year1, month1+1, day1)
+        val date2 = LocalDate.of(year2, month2+1, day2)
 
         var result = false
 

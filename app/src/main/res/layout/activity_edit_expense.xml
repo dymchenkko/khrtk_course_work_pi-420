@@ -33,6 +33,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_expense_name"
             android:layout_width="match_parent"
+            android:maxLength="300"
             android:layout_height="wrap_content"
             android:hint="Витрата*" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -85,14 +86,31 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="14dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:text="Редагувати витрату"
         android:textStyle="bold"
         android:layout_marginHorizontal="16dp"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:background="@drawable/button_background"        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/datePickerButton"
+        android:background="@drawable/button_background"
+        app:layout_constraintBottom_toTopOf="@id/delete_expense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/delete_expense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="Видалити витрату"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@drawable/button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />

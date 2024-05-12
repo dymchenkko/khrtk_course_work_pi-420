@@ -94,6 +94,27 @@ class EditExpense : AppCompatActivity() {
 
                             }
                         }
+                        binding.deleteExpense.setOnClickListener {
+                            val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditExpense)
+                            builder
+                                .setMessage("Ви точно хочете видалити витрату?")
+                                .setTitle("Видалення витрати")
+                                .setPositiveButton("Так") { dialog, which ->
+                                    val user = firebaseAuth.currentUser
+                                    user?.let {
+                                        var uid = it.uid
+                                        FirebaseDatabase.getInstance().reference.child("expenses")
+                                            .child(uid).child(hash).removeValue();
+                                        this.finish();
+
+                                    }
+                                }
+                                .setNegativeButton("Ні") { dialog, which ->
+                                }
+
+                            val dialog: AlertDialog = builder.create()
+                            dialog.show()
+                        }
 
                     }.addOnFailureListener {
                         Log.e("firebase", "Error getting data", it)

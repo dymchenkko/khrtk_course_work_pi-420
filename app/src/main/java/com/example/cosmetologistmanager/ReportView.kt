@@ -260,7 +260,7 @@ if (is_expenses_checked) {
                     val current = LocalDateTime.now().format(formatter)
                     val fileOutput =
                         path.toString() + "/" + current + ".xls"
-                    writeToExcelFile(fileOutput)
+                    writeToExcelFile(fileOutput, current)
                 }
                 .setNegativeButton("Ні") { dialog, which ->
                 }
@@ -270,67 +270,6 @@ if (is_expenses_checked) {
 
         }
 
-    }
-
-    /*@RequiresApi(Build.VERSION_CODES.O)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            9999 -> {
-                if (data != null) {
-                    val docUri = DocumentsContract.buildDocumentUriUsingTree(
-                        data.data,
-                        DocumentsContract.getTreeDocumentId(data.data)
-                    )
-                    val path: String = getPath(this, docUri)!!
-                    Log.i("Test", "Result URI " + path)
-                    val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-
-                    if (!path.startsWith(downloadsDir)) {
-                        Toast.makeText(this, "Звіт можна зберегти тільки всередині папки Downloads!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
-                        val current = LocalDateTime.now().format(formatter)
-                        val fileOutput =
-                            path.toString() + "/" + current + ".xls"
-                        Log.e("array before call function", dataArrayList.size.toString())
-                        writeToExcelFile(fileOutput, dataArrayList)
-                    }
-                }
-                //val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                //Log.i("Test", "path " + path)
-
-                /*val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
-                val current = LocalDateTime.now().format(formatter)
-                val fileOutput =
-                    path.toString() + "/" + current + ".xls"
-                writeToExcelFile(fileOutput)*/
-            }
-        }
-    }*/
-
-    fun getDataColumn(
-        context: Context, uri: Uri?, selection: String?,
-        selectionArgs: Array<String>?
-    ): String? {
-        var cursor: Cursor? = null
-        val column = "_data"
-        val projection = arrayOf(
-            column
-        )
-        try {
-            cursor = context.contentResolver.query(
-                uri!!, projection, selection, selectionArgs,
-                null
-            )
-            if (cursor != null && cursor.moveToFirst()) {
-                val index: Int = cursor.getColumnIndexOrThrow(column)
-                return cursor.getString(index)
-            }
-        } finally {
-            if (cursor != null) cursor.close()
-        }
-        return null
     }
 
     override fun onRestart() {
@@ -391,9 +330,8 @@ if (is_expenses_checked) {
                                         "Результат: "+ (sum_income - sum_expense).toString() + " грн."
 
                                 }
-                                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-                                dataArrayList = ArrayList(sortListData(dataArrayList, false,true))
-                                binding.listReview.setAdapter(listAdapter)
+                                sort_all()
+                                sort_all2()
                             }
 
                             if (dataArrayList.size == 0) {
@@ -456,9 +394,8 @@ if (is_expenses_checked) {
                                     Log.e("array length2", dataArrayList.size.toString())
 
                                 }
-                                dataArrayList = ArrayList(sortListData(dataArrayList, false, true))
-                                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-                                binding.listReview.setAdapter(listAdapter)
+                                sort_all()
+                                sort_all2()
                             }
                             if (dataArrayList.size == 0) {
                                 binding.incomeSum.text =  "Доход: 0 грн."
@@ -476,7 +413,7 @@ if (is_expenses_checked) {
         }
 
     }
-    fun writeToExcelFile(filepath: String) {
+    fun writeToExcelFile(filepath: String, current: String) {
         val xlWb = HSSFWorkbook()
         val xlWs = xlWb.createSheet()
 
@@ -508,7 +445,7 @@ if (is_expenses_checked) {
         xlWb.write(outputStream)
         xlWb.close()
 
-        val text = "Звіт був успішно завантажений під назвою: " + filepath
+        val text = "Звіт завантажений під назвою: " + current
         val duration = Toast.LENGTH_SHORT
         val toast = Toast.makeText(this@ReportView, text, duration)
         toast.show()
