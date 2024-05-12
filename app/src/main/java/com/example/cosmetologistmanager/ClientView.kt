@@ -151,7 +151,7 @@ class ClientView : AppCompatActivity() {
         val user = firebaseAuth.currentUser
 
         if (intent != null) {
-            user?.let {
+            user?.let { it ->
                 var uid = it.uid
                 hash = intent.getStringExtra("hash")
                 FirebaseDatabase.getInstance().reference.child("clients").child(uid)

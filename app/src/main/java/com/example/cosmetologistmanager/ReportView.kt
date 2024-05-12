@@ -2,10 +2,12 @@ package com.example.cosmetologistmanager
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.AlertDialog
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -50,11 +52,14 @@ class ReportView : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.sort_types,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_list
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.sortIncomesExpenses.adapter = adapter
         }
+        binding.sortIncomesExpenses.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+        binding.extraSort.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+
 
         val is_expenses_checked = intent.getBooleanExtra("expenses", false)
         val is_incomes_checked = intent.getBooleanExtra("incomes", false)
@@ -96,24 +101,31 @@ if (is_expenses_checked) {
                             month_to,
                             year_to,
                             expense?.day!!.toInt(),
-                            expense?.month!!.toInt(),
-                            expense?.year!!.toInt()
+                            expense.month!!.toInt(),
+                            expense.year!!.toInt()
                         )
                     ) {
                         dataArrayList.add(listData)
-                        sum_expense += expense?.price!!.toInt()
-                        binding.expenseSum.text = sum_expense.toString() + " грн."
-                        binding.res.text = (sum_income - sum_expense).toString() + " грн."
+                        sum_expense += expense.price!!.toInt()
+                        binding.incomeSum.text =  "Доход: "+ sum_income.toString() + " грн."
+                        binding.expenseSum.text =  "Витрати: "+ sum_expense.toString() + " грн."
+                        binding.res.text =
+                            "Результат: "+ (sum_income - sum_expense).toString() + " грн."
+
                     }
                     dataArrayList = ArrayList(sortListData(dataArrayList, false, true))
                     listAdapter = ReportAdapter(this@ReportView, dataArrayList)
                     binding.listReview.setAdapter(listAdapter)
-                    //binding.listReview.setClickable(true)
-                    Log.d("list of appointments", items.toString())
                 }
 
                 if (dataArrayList.size == 0) {
-                    //binding.noClients.visibility = View.VISIBLE
+                    binding.incomeSum.text =  "Доход: 0 грн."
+                    binding.expenseSum.text =  "Витрати: 0 грн."
+                    binding.res.text =
+                        "Результат: 0 грн."
+                    binding.noReport.visibility = View.VISIBLE
+                    binding.downloadReport.isClickable = false
+
                 }
             }
 
@@ -152,9 +164,9 @@ if (is_expenses_checked) {
                                         day_to,
                                         month_to,
                                         year_to,
-                                        listData?.day!!.toInt(),
-                                        listData?.month!!.toInt(),
-                                        listData?.year!!.toInt()
+                                        listData.day.toInt(),
+                                        listData.month.toInt(),
+                                        listData.year.toInt()
                                     )
                                 ) {
                                     dataArrayList.add(listData)
@@ -163,11 +175,22 @@ if (is_expenses_checked) {
                                     binding.expenseSum.text =  "Витрати: "+ sum_expense.toString() + " грн."
                                     binding.res.text =
                                         "Результат: "+ (sum_income - sum_expense).toString() + " грн."
+                                    Log.e("array length4", dataArrayList.size.toString())
+
                                 }
                                 dataArrayList = ArrayList(sortListData(dataArrayList, false, true))
 
                                 listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-                                binding.listReview.setAdapter(listAdapter)
+                                binding.listReview.adapter = listAdapter
+                            }
+                            if (dataArrayList.size == 0) {
+                                binding.incomeSum.text =  "Доход: 0 грн."
+                                binding.expenseSum.text =  "Витрати: 0 грн."
+                                binding.res.text =
+                                    "Результат: 0 грн."
+                                binding.noReport.visibility = View.VISIBLE
+                                binding.downloadReport.isClickable = false
+
                             }
                         }
 
@@ -176,18 +199,19 @@ if (is_expenses_checked) {
             }
         }
 
-        binding.listReview.setAdapter(listAdapter)
-        binding.listReview.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            if (dataArrayList[i].kind == OperationKind.Expense){
-                val intent = Intent(this@ReportView, EditExpense::class.java)
-                intent.putExtra("hash", dataArrayList[i].hash)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this@ReportView, EditAppointmentActivity::class.java)
-                intent.putExtra("hash", dataArrayList[i].hash)
-                startActivity(intent)
+        binding.listReview.adapter = listAdapter
+        binding.listReview.onItemClickListener =
+            AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                if (dataArrayList[i].kind == OperationKind.Expense){
+                    val intent = Intent(this@ReportView, EditExpense::class.java)
+                    intent.putExtra("hash", dataArrayList[i].hash)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this@ReportView, EditAppointmentActivity::class.java)
+                    intent.putExtra("hash", dataArrayList[i].hash)
+                    startActivity(intent)
+                }
             }
-        })
 
         binding.sortIncomesExpenses.setOnItemSelectedListener(object :
             AdapterView.OnItemSelectedListener {
@@ -198,6 +222,8 @@ if (is_expenses_checked) {
                 id: Long
             ) {
                 sort_all()
+                Log.e("array after sort", dataArrayList.size.toString())
+
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -205,7 +231,7 @@ if (is_expenses_checked) {
             }
         })
 
-        binding.extraSort.setOnItemSelectedListener(object :
+        binding.extraSort.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -214,77 +240,39 @@ if (is_expenses_checked) {
                 id: Long
             ) {
                 sort_all2()
+                Log.e("array after sort", dataArrayList.size.toString())
+
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
                 // your code here
             }
-        })
-        /*binding.listReview.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
-        val intent = Intent(this@ReportView, MainActivity::class.java)
-        //intent.putExtra("hash", dataArrayList[i].hash)
-        startActivity(intent)
-    })*/
-
-
-        /*val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        val fileOutput =
-          path.toString() + "/test.xls"
-
-        var filepath = path.toString() + "/test.xlsx"
-        //val filepath = "./test.xlsx"
-        /*val fileOutput: File =
-            File(storageVolume.getDirectory().getPath() + "/Download/ProgrammerWorld.xls")*/
-            filepath= Environment.getExternalStorageDirectory().toString() + "/test.xls";
-
-        writeToExcelFile(fileOutput)
-        readFromExcelFile(fileOutput)*/
-        //Create a class variable that is your activities request code
-        //Create a class variable that is your activities request code
-
-//Create the intent and start the activity
-
-//Create the intent and start the activity
+        }
 
         binding.downloadReport.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this@ReportView)
+            builder
+                .setMessage("Ви точно завантажити звіт?")
+                .setTitle("Звіт буде завантажено у .xls (excel) файл")
+                .setPositiveButton("Так") { dialog, which ->
+                    val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")
+                    val current = LocalDateTime.now().format(formatter)
+                    val fileOutput =
+                        path.toString() + "/" + current + ".xls"
+                    writeToExcelFile(fileOutput)
+                }
+                .setNegativeButton("Ні") { dialog, which ->
+                }
 
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                /*val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                i.addCategory(Intent.CATEGORY_DEFAULT)
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.type = "application/vnd.ms-excel"
-                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getExternalStorageDirectory().toUri())
-
-                //intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)))
-                startActivityForResult(Intent.createChooser(i, "Choose directory"), 9999)*/
-                /*val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                intent.addCategory(Intent.CATEGORY_DEFAULT)
-
-                // Specify a starting directory URI to Downloads directory
-                val downloadsUri = Uri.parse("content://com.android.externalstorage.documents/tree/downloads")
-                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, downloadsUri)
-                startActivityForResult(intent, 9999)*/
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                intent.addCategory(Intent.CATEGORY_DEFAULT)
-
-                // Specify a starting directory URI to Downloads directory
-                val downloadsUri = Uri.parse("content://com.android.externalstorage.documents/tree/downloads")
-                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, downloadsUri)
-
-                startActivityForResult(intent, 9999)
-            }
-            /*val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
-            val current = LocalDateTime.now().format(formatter)
-            val fileOutput =
-                path.toString() + "/" + current + ".xls"
-            writeToExcelFile(fileOutput)*/
         }
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    /*@RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -305,7 +293,8 @@ if (is_expenses_checked) {
                         val current = LocalDateTime.now().format(formatter)
                         val fileOutput =
                             path.toString() + "/" + current + ".xls"
-                        writeToExcelFile(fileOutput)
+                        Log.e("array before call function", dataArrayList.size.toString())
+                        writeToExcelFile(fileOutput, dataArrayList)
                     }
                 }
                 //val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -318,61 +307,8 @@ if (is_expenses_checked) {
                 writeToExcelFile(fileOutput)*/
             }
         }
-    }
+    }*/
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    fun getPath(context: Context, uri: Uri): String? {
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                val docId = DocumentsContract.getDocumentId(uri)
-                val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()
-                val type = split[0]
-                if ("primary".equals(type, ignoreCase = true)) {
-                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
-                }
-                // TODO handle non-primary volumes
-            } else if (isDownloadsDocument(uri)) {
-                val id = DocumentsContract.getDocumentId(uri)
-                val contentUri = ContentUris.withAppendedId(
-                    Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
-                )
-                return getDataColumn(context, contentUri, null, null)
-            } else if (isMediaDocument(uri)) {
-                val docId = DocumentsContract.getDocumentId(uri)
-                val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()
-                val type = split[0]
-                var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                }
-                val selection = "_id=?"
-                val selectionArgs = arrayOf(
-                    split[1]
-                )
-                return getDataColumn(context, contentUri, selection, selectionArgs)
-            }
-        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
-            // Return the remote address
-            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
-                context,
-                uri,
-                null,
-                null
-            )
-        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
-            return uri.path
-        }
-        return null
-    }
     fun getDataColumn(
         context: Context, uri: Uri?, selection: String?,
         selectionArgs: Array<String>?
@@ -397,37 +333,6 @@ if (is_expenses_checked) {
         return null
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    fun isExternalStorageDocument(uri: Uri): Boolean {
-        return "com.android.externalstorage.documents" == uri.authority
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    fun isDownloadsDocument(uri: Uri): Boolean {
-        return "com.android.providers.downloads.documents" == uri.authority
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    fun isMediaDocument(uri: Uri): Boolean {
-        return "com.android.providers.media.documents" == uri.authority
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    fun isGooglePhotosUri(uri: Uri): Boolean {
-        return "com.google.android.apps.photos.content" == uri.authority
-    }
     override fun onRestart() {
         super.onRestart()
         dataArrayList = ArrayList<ListReportData>()
@@ -480,18 +385,25 @@ if (is_expenses_checked) {
                                 ) {
                                     dataArrayList.add(listData)
                                     sum_expense += expense.price!!.toInt()
-                                    binding.expenseSum.text = "$sum_expense грн."
-                                    binding.res.text = (sum_income - sum_expense).toString() + " грн."
+                                    binding.incomeSum.text =  "Доход: "+ sum_income.toString() + " грн."
+                                    binding.expenseSum.text =  "Витрати: "+ sum_expense.toString() + " грн."
+                                    binding.res.text =
+                                        "Результат: "+ (sum_income - sum_expense).toString() + " грн."
+
                                 }
                                 listAdapter = ReportAdapter(this@ReportView, dataArrayList)
                                 dataArrayList = ArrayList(sortListData(dataArrayList, false,true))
                                 binding.listReview.setAdapter(listAdapter)
-                                //binding.listReview.setClickable(true)
-                                //Log.d("list of appointments", items.toString())
                             }
 
                             if (dataArrayList.size == 0) {
-                                //binding.noClients.visibility = View.VISIBLE
+                                binding.incomeSum.text =  "Доход: 0 грн."
+                                binding.expenseSum.text =  "Витрати: 0 грн."
+                                binding.res.text =
+                                    "Результат: 0 грн."
+                                binding.noReport.visibility = View.VISIBLE
+                                binding.downloadReport.isClickable = false
+
                             }
                         }
 
@@ -530,9 +442,9 @@ if (is_expenses_checked) {
                                         day_to,
                                         month_to,
                                         year_to,
-                                        listData?.day!!.toInt(),
-                                        listData?.month!!.toInt(),
-                                        listData?.year!!.toInt()
+                                        listData.day.toInt(),
+                                        listData.month.toInt(),
+                                        listData.year.toInt()
                                     )
                                 ) {
                                     dataArrayList.add(listData)
@@ -541,10 +453,20 @@ if (is_expenses_checked) {
                                     binding.expenseSum.text =  "Витрати: "+ sum_expense.toString() + " грн."
                                     binding.res.text =
                                         "Результат: "+ (sum_income - sum_expense).toString() + " грн."
+                                    Log.e("array length2", dataArrayList.size.toString())
+
                                 }
                                 dataArrayList = ArrayList(sortListData(dataArrayList, false, true))
                                 listAdapter = ReportAdapter(this@ReportView, dataArrayList)
                                 binding.listReview.setAdapter(listAdapter)
+                            }
+                            if (dataArrayList.size == 0) {
+                                binding.incomeSum.text =  "Доход: 0 грн."
+                                binding.expenseSum.text =  "Витрати: 0 грн."
+                                binding.res.text =
+                                    "Результат: 0 грн."
+                                binding.noReport.visibility = View.VISIBLE
+                                binding.downloadReport.isClickable = false
                             }
                         }
 
@@ -562,12 +484,14 @@ if (is_expenses_checked) {
             var cell = xlWs.createRow(i+1)
             cell.createCell(0).setCellValue(dataArrayList.get(i).name)
             cell.createCell(1).setCellValue(dataArrayList.get(i).price   +" грн.")
-            if (dataArrayList.get(i).kind == OperationKind.Income ) {
+            if (dataArrayList[i].kind == OperationKind.Income ) {
                 cell.createCell(2).setCellValue("Дохід")
             } else {
                 cell.createCell(2).setCellValue("Витрата")
             }
         }
+
+        Log.e("array lengthh", dataArrayList.size.toString())
         var cell1 = xlWs.createRow(dataArrayList.size+2)
         cell1.createCell(0).setCellValue("Усього доходу:")
         cell1.createCell(1).setCellValue(sum_income.toString()  +" грн.")
@@ -588,7 +512,7 @@ if (is_expenses_checked) {
         val duration = Toast.LENGTH_SHORT
         val toast = Toast.makeText(this@ReportView, text, duration)
         toast.show()
-        binding.downloadReport.isClickable = false
+        //binding.downloadReport.isClickable = false
     }
 
     fun isDateInRange(day1: Int, month1: Int, year1: Int, day2: Int, month2: Int, year2: Int, day3: Int, month3: Int, year3: Int): Boolean {
@@ -603,7 +527,7 @@ if (is_expenses_checked) {
         // Check if date3 is between date1 and date2
         return date3 in date1..date2
     }
-    fun sortListReportDataByDate(list: ArrayList<ListReportData>, is_normal: Boolean): ArrayList<ListReportData> {
+    private fun sortListReportDataByDate(list: ArrayList<ListReportData>, is_normal: Boolean): ArrayList<ListReportData> {
         var sortedList = ArrayList(list.sortedWith(compareBy({ it.year.toInt() }, { it.month.toInt() }, { it.day.toInt() })))
         if (is_normal) {
             sortedList.reverse()
@@ -650,35 +574,41 @@ if (is_expenses_checked) {
     fun sort_all() {
         val sort: String = binding.sortIncomesExpenses.getSelectedItem().toString()
 
-        if (sort.equals("За датою")) {
+        if (sort == "За датою") {
             ArrayAdapter.createFromResource(
                 this@ReportView,
                 R.array.sort_types_date,
-                android.R.layout.simple_spinner_item
+                R.layout.spinner_list
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.extraSort.adapter = adapter
             }
+            binding.sortIncomesExpenses.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+            binding.extraSort.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+
             binding.extraSort.visibility = View.VISIBLE
             var is_normal = true
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
 
-            if (extraSort.equals("Найстаріші")) {
+            if (extraSort == "Найстаріші") {
                 is_normal = false
             }
             binding.extraSort.visibility = View.VISIBLE
             dataArrayList = ArrayList(sortListReportDataByDate(dataArrayList, is_normal))
             listAdapter = ReportAdapter(this@ReportView, dataArrayList)
             binding.listReview.setAdapter(listAdapter)
-        } else if (sort.equals("За алфавітним порядком")) {
+        } else if (sort == "За алфавітним порядком") {
             ArrayAdapter.createFromResource(
                 this@ReportView,
                 R.array.sort_types_alphabet,
-                android.R.layout.simple_spinner_item
+                R.layout.spinner_list
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.extraSort.adapter = adapter
             }
+            binding.extraSort.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+            binding.sortIncomesExpenses.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
 
             if (extraSort.equals("Від Я до А (Z до A)")) {
@@ -692,19 +622,22 @@ if (is_expenses_checked) {
             ArrayAdapter.createFromResource(
                 this@ReportView,
                 R.array.sort_types_price,
-                android.R.layout.simple_spinner_item
+                R.layout.spinner_list
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.extraSort.adapter = adapter
             }
+            binding.sortIncomesExpenses.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+            binding.extraSort.getBackground().setColorFilter(getResources().getColor(R.color.spinner_color), PorterDuff.Mode.SRC_ATOP);
+
             var isIncome = true
             var lowestFirst = true
-            if (sort.equals("Спочатку витрати, потім доходи")) {
+            if (sort == "Спочатку витрати, потім доходи") {
                 isIncome = false
             }
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
 
-            if (extraSort.equals("Спочатку найбільша ціна")) {
+            if (extraSort == "Спочатку найбільша ціна") {
                 lowestFirst = false
             }
             binding.extraSort.visibility = View.VISIBLE
@@ -718,11 +651,11 @@ if (is_expenses_checked) {
     fun sort_all2() {
         val sort: String = binding.sortIncomesExpenses.getSelectedItem().toString()
 
-        if (sort.equals("За датою")) {
+        if (sort == "За датою") {
             var is_normal = true
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
 
-            if (extraSort.equals("Найстаріші")) {
+            if (extraSort == "Найстаріші") {
                 is_normal = false
             }
             binding.extraSort.visibility = View.VISIBLE
@@ -730,10 +663,10 @@ if (is_expenses_checked) {
             listAdapter = ReportAdapter(this@ReportView, dataArrayList)
             binding.listReview.setAdapter(listAdapter)
 
-        } else if (sort.equals("За алфавітним порядком")) {
+        } else if (sort == "За алфавітним порядком") {
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
 
-            if (extraSort.equals("Від Я до А (Z до A)")) {
+            if (extraSort == "Від Я до А (Z до A)") {
                 dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, false))
             } else {
                 dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, true))
@@ -743,7 +676,7 @@ if (is_expenses_checked) {
         } else {
             var isIncome = true
             var lowestFirst = true
-            if (sort.equals("Спочатку витрати, потім доходи")) {
+            if (sort == "Спочатку витрати, потім доходи") {
                 isIncome = false
             }
             val extraSort: String = binding.extraSort.getSelectedItem().toString()
