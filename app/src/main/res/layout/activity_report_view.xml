@@ -28,6 +28,7 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/extra_sort"
+        app:layout_constraintBottom_toTopOf="@+id/income_sum"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

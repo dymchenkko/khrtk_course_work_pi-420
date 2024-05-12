@@ -23,12 +23,12 @@ class NewReport : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.createNewReport.setOnClickListener{
-            var day_from = binding.datePickerButtonfrom.dayOfMonth
-            var day_to = binding.datePickerButtonto.dayOfMonth
-            var month_from = binding.datePickerButtonfrom.month
-            var month_to = binding.datePickerButtonto.month
-            var year_from = binding.datePickerButtonfrom.year
-            var year_to = binding.datePickerButtonto.year
+            val day_from = binding.datePickerButtonfrom.dayOfMonth
+            val day_to = binding.datePickerButtonto.dayOfMonth
+            val month_from = binding.datePickerButtonfrom.month
+            val month_to = binding.datePickerButtonto.month
+            val year_from = binding.datePickerButtonfrom.year
+            val year_to = binding.datePickerButtonto.year
             if (!binding.checkExpensesSwitch.isChecked && !binding.checkIncomesSwitch.isChecked){
                 val text = "Відмітьте хоча б одне поле (Доходи/Розходи)!"
                 val duration = Toast.LENGTH_SHORT

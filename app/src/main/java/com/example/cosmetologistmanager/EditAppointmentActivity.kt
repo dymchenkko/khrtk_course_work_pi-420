@@ -55,7 +55,7 @@ class EditAppointmentActivity : AppCompatActivity() {
 
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .child(hash).get().addOnSuccessListener {
-                        var appointment: Appointment? = it.getValue(Appointment::class.java)
+                        val appointment: Appointment? = it.getValue(Appointment::class.java)
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -219,28 +219,9 @@ class EditAppointmentActivity : AppCompatActivity() {
 
                     for (pair in items) {
                         if (pair.first == client) {
-                            Log.e("current item", pair.first)
-                            Log.e("appointment procedure", appointment?.procedure.toString())
-                            Log.e("current procedure", procedure_name)
-                            Log.e("appointment day", appointment?.day.toString())
-                            Log.e("current day", date_day)
-                            Log.e("appointment month", appointment?.month.toString())
-                            Log.e("current month", date_month)
-                            Log.e("appointment year", appointment?.year.toString())
-                            Log.e("current year", date_year)
-                            Log.e("appointment hour", appointment?.hour.toString())
-                            Log.e("current hour", time_hour)
-                            Log.e("appointment minute", appointment?.minute.toString())
-                            Log.e("current minute", time_minute)
-                            Log.e("appointment additional_information", appointment?.additional_information.toString())
-                            Log.e("current additional_information", additional_information)
-                            Log.e("appointment price", appointment?.price.toString())
-                            Log.e("current price", procedure_price)
-                            Log.e("appointment client", appointment?.client.toString())
-                            Log.e("current client", pair.second)
-                            if (appointment?.procedure != procedure_name ||
-                                appointment?.day != date_day ||
-                                appointment?.month != date_month ||
+                            if (appointment.procedure != procedure_name ||
+                                appointment.day != date_day ||
+                                appointment.month != date_month ||
                                 appointment.year != date_year ||
                                 appointment.hour != time_hour ||
                                 appointment.minute != time_minute ||
@@ -276,7 +257,7 @@ class EditAppointmentActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (procedure_price.equals("")){
+        if (procedure_price == ""){
             val text = "Поле ціни не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -284,7 +265,7 @@ class EditAppointmentActivity : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (procedure_price?.toInt()!! < 0){
+        if (procedure_price.toInt() < 0){
             val text = "Ціна процедури не може бути від'ємною"
             val duration = Toast.LENGTH_LONG
 

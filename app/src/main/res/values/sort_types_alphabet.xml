@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sort_types_alphabet">
-        <item>Від А до Я</item>
-        <item>Від Я до А</item>
+        <item>Від А до Я (A до Z)</item>
+        <item>Від Я до А (Z до A)</item>
     </string-array>
 </resources>
