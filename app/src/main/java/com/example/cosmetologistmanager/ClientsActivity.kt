@@ -47,8 +47,8 @@ class ClientsActivity : AppCompatActivity() {
 
                             dataArrayList.add(listData)
                             listAdapter = ListClientsAdapter(this@ClientsActivity, dataArrayList)
-                            binding.listClients.setAdapter(listAdapter)
-                            binding.listClients.setClickable(true)
+                            binding.listClients.adapter = listAdapter
+                            binding.listClients.isClickable = true
                             Log.d("list of appointments", items.toString())
                         }
 
@@ -61,23 +61,30 @@ class ClientsActivity : AppCompatActivity() {
                 })
         }
 
-        binding.listClients.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val intent = Intent(this@ClientsActivity, ClientView::class.java)
-            intent.putExtra("hash", dataArrayList[i].hash)
-            startActivity(intent)
-        })
+        binding.listClients.onItemClickListener =
+            AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                val intent = Intent(this@ClientsActivity, ClientView::class.java)
+                intent.putExtra("hash", dataArrayList[i].hash)
+                startActivity(intent)
+            }
 
         binding.searchClient.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateFilteredList(s.toString())
+                binding.noSearch.visibility = View.INVISIBLE
+
                 listAdapter = ListClientsAdapter(this@ClientsActivity, filteredList)
-                binding.listClients.setAdapter(listAdapter)
-                binding.listClients.setClickable(true)
-                binding.listClients.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
-                    val intent = Intent(this@ClientsActivity, ClientView::class.java)
-                    intent.putExtra("hash", filteredList[i].hash)
-                    startActivity(intent)
-                })
+                binding.listClients.adapter = listAdapter
+                binding.listClients.isClickable = true
+                binding.listClients.onItemClickListener =
+                    AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                        val intent = Intent(this@ClientsActivity, ClientView::class.java)
+                        intent.putExtra("hash", filteredList[i].hash)
+                        startActivity(intent)
+                    }
+                if (filteredList.size == 0) {
+                binding.noSearch.visibility = View.VISIBLE
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

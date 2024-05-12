@@ -281,11 +281,11 @@ class EditAppointmentActivity : AppCompatActivity() {
                 time_minute.toInt()
             )
         ) {
-            val text = "Зверніть увагу, що ви додали дату і час у минулому!"
+            /*val text = "Зверніть увагу, що ви додали дату і час у минулому!"
             val duration = Toast.LENGTH_LONG
 
             val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
-            toast.show()
+            toast.show()*/
         }
         return true
     }
