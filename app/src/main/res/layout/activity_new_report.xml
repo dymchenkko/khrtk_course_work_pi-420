@@ -13,6 +13,7 @@
         android:layout_marginTop="50dp"
         android:text="Новий звіт"
         android:textSize="30dp"
+        android:textColor="#f82634"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="* обов'язкові поля"
-        android:textSize="15dp"
+        android:textSize="17dp"
         android:layout_marginLeft="20dp"
         android:textColor="#fa7d6f"
         app:layout_constraintLeft_toLeftOf="parent"

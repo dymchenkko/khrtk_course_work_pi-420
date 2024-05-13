@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="50dp"
         android:textSize="30dp"
+        android:textColor="#f82634"
         android:textStyle="bold"
         android:text="Новий клієнт"
         tools:ignore="MissingConstraints" />
@@ -101,7 +102,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Тип шкіри"
-
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_phone_number_layout"
@@ -181,7 +183,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="* обов'язкові поля"
-        android:textSize="15dp"
+        android:textSize="17dp"
         android:layout_marginLeft="20dp"
         android:textColor="#fa7d6f"
         app:layout_constraintLeft_toLeftOf="parent"
