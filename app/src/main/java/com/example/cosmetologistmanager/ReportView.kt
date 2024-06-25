@@ -51,12 +51,12 @@ class ReportView : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.sortIncomesExpenses.adapter = adapter
         }
-        binding.sortIncomesExpenses.getBackground().setColorFilter(
-            getResources().getColor(R.color.spinner_color),
+        binding.sortIncomesExpenses.background.setColorFilter(
+            resources.getColor(R.color.spinner_color),
             PorterDuff.Mode.SRC_ATOP
         );
-        binding.extraSort.getBackground().setColorFilter(
-            getResources().getColor(R.color.spinner_color),
+        binding.extraSort.background.setColorFilter(
+            resources.getColor(R.color.spinner_color),
             PorterDuff.Mode.SRC_ATOP
         );
 
@@ -72,18 +72,15 @@ class ReportView : AppCompatActivity() {
 
         val user = firebaseAuth.currentUser
         user?.let {
-            var uid = it.uid
+            val uid = it.uid
             if (is_expenses_checked) {
                 FirebaseDatabase.getInstance().reference.child("expenses").child(uid)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
+                        @SuppressLint("SetTextI18n")
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             for (snapshot in dataSnapshot.children) {
                                 val expense: Expense? = snapshot.getValue(Expense::class.java)
-                                Log.d("hash", snapshot?.key + "")
-                                Log.d("expense", expense?.name.toString())
-                                Log.d("expense", expense?.day.toString())
-
-                                var listData = ListReportData(
+                                val listData = ListReportData(
                                     expense?.name.toString(),
                                     expense?.day.toString(),
                                     expense?.month.toString(),
@@ -107,16 +104,16 @@ class ReportView : AppCompatActivity() {
                                     dataArrayList.add(listData)
                                     sum_expense += expense.price!!.toInt()
                                     binding.incomeSum.text =
-                                        "Доход: " + sum_income.toString() + " грн."
+                                        "Доход: $sum_income грн."
                                     binding.expenseSum.text =
-                                        "Витрати: " + sum_expense.toString() + " грн."
+                                        "Витрати: $sum_expense грн."
                                     binding.res.text =
                                         "Результат: " + (sum_income - sum_expense).toString() + " грн."
 
                                 }
                                 dataArrayList = ArrayList(sortListData(dataArrayList, false, true))
                                 listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-                                binding.listReview.setAdapter(listAdapter)
+                                binding.listReview.adapter = listAdapter
                             }
 
                             if (dataArrayList.size == 0) {
@@ -140,6 +137,7 @@ class ReportView : AppCompatActivity() {
 
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
+                        @SuppressLint("SetTextI18n")
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             for (snapshot in dataSnapshot.children) {
                                 val new_appointment: Appointment? =
@@ -154,10 +152,6 @@ class ReportView : AppCompatActivity() {
                                     OperationKind.Income,
                                     snapshot?.key.toString()
                                 )
-                                //Log.d("new_appointment price", listData.price.toString())
-
-                                //sum_income = sum_income + new_appointment?.price?.toInt()!!
-
                                 if (isDateInRange(
                                         day_from,
                                         month_from,
@@ -232,7 +226,6 @@ class ReportView : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
             }
         }
 
@@ -245,11 +238,9 @@ class ReportView : AppCompatActivity() {
                 id: Long
             ) {
                 sort_all2()
-
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
             }
         }
 
@@ -258,7 +249,7 @@ class ReportView : AppCompatActivity() {
             builder
                 .setMessage("Ви точно завантажити звіт?")
                 .setTitle("Звіт буде завантажено у .xls (excel) файл")
-                .setPositiveButton("Так") { dialog, which ->
+                .setPositiveButton("Так") { _, _ ->
                     val path =
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")
@@ -269,7 +260,7 @@ class ReportView : AppCompatActivity() {
                         addLeadingZero(day_from.toString()) + "/" + addLeadingZero(month_from.toString()) + "/" + year_from + " — " + addLeadingZero(day_to.toString()) + "/" + addLeadingZero(month_to.toString()) + "/" + year_to
                     writeToExcelFile(fileOutput, current, date_from_and_to)
                 }
-                .setNegativeButton("Ні") { dialog, which ->
+                .setNegativeButton("Ні") { _, _ ->
                 }
 
             val dialog: AlertDialog = builder.create()
@@ -296,7 +287,7 @@ class ReportView : AppCompatActivity() {
         val year_to = intent.getIntExtra("year_to", 0)
         val user = firebaseAuth.currentUser
         user?.let {
-            var uid = it.uid
+            val uid = it.uid
             if (is_expenses_checked) {
                 FirebaseDatabase.getInstance().reference.child("expenses").child(uid)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -332,14 +323,13 @@ class ReportView : AppCompatActivity() {
                                     dataArrayList.add(listData)
                                     sum_expense += expense.price!!.toInt()
                                     binding.incomeSum.text =
-                                        "Доход: " + sum_income.toString() + " грн."
+                                        "Доход: $sum_income грн."
                                     binding.expenseSum.text =
-                                        "Витрати: " + sum_expense.toString() + " грн."
+                                        "Витрати: $sum_expense грн."
                                     binding.res.text =
                                         "Результат: " + (sum_income - sum_expense).toString() + " грн."
 
                                 }
-                                sort_all()
                                 sort_all2()
                             }
 
@@ -378,10 +368,6 @@ class ReportView : AppCompatActivity() {
                                     OperationKind.Income,
                                     snapshot?.key.toString()
                                 )
-                                //Log.d("new_appointment price", listData.price.toString())
-
-                                //sum_income = sum_income + new_appointment?.price?.toInt()!!
-
                                 if (isDateInRange(
                                         day_from,
                                         month_from,
@@ -405,7 +391,6 @@ class ReportView : AppCompatActivity() {
                                     Log.e("array length2", dataArrayList.size.toString())
 
                                 }
-                                sort_all()
                                 sort_all2()
                             }
                             if (dataArrayList.size == 0) {
@@ -425,7 +410,7 @@ class ReportView : AppCompatActivity() {
 
     }
 
-    fun writeToExcelFile(filepath: String, current: String, date_from_and_to: String) {
+    private fun writeToExcelFile(filepath: String, current: String, date_from_and_to: String) {
         val xlWb = HSSFWorkbook()
         val xlWs = xlWb.createSheet()
         for (i in 0..dataArrayList.size - 1) {
@@ -441,11 +426,11 @@ class ReportView : AppCompatActivity() {
 
         val cell1 = xlWs.createRow(dataArrayList.size + 2)
         cell1.createCell(0).setCellValue("Усього доходу:")
-        cell1.createCell(1).setCellValue(sum_income.toString() + " грн.")
+        cell1.createCell(1).setCellValue("$sum_income грн.")
 
         val cell2 = xlWs.createRow(dataArrayList.size + 3)
         cell2.createCell(0).setCellValue("Усього витрат:")
-        cell2.createCell(1).setCellValue(sum_expense.toString() + " грн.")
+        cell2.createCell(1).setCellValue("$sum_expense грн.")
 
         val cell3 = xlWs.createRow(dataArrayList.size + 4)
         cell3.createCell(0).setCellValue("Результат:")
@@ -529,7 +514,7 @@ class ReportView : AppCompatActivity() {
     }
 
 
-    fun sortListAlphabetically(list: List<ListReportData>, normal: Boolean): List<ListReportData> {
+    private fun sortListAlphabetically(list: List<ListReportData>, normal: Boolean): List<ListReportData> {
         if (!normal) {
             return list.sortedBy { it.name.lowercase() }.reversed()
 
@@ -540,139 +525,147 @@ class ReportView : AppCompatActivity() {
     fun sort_all() {
         val sort: String = binding.sortIncomesExpenses.selectedItem.toString()
 
-        if (sort == "За датою") {
-            ArrayAdapter.createFromResource(
-                this@ReportView,
-                R.array.sort_types_date,
-                R.layout.spinner_list
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.extraSort.adapter = adapter
-            }
-            binding.sortIncomesExpenses.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
-            binding.extraSort.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
+        when (sort) {
+            "За датою" -> {
+                ArrayAdapter.createFromResource(
+                    this@ReportView,
+                    R.array.sort_types_date,
+                    R.layout.spinner_list
+                ).also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    binding.extraSort.adapter = adapter
+                }
+                binding.sortIncomesExpenses.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
+                binding.extraSort.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
 
-            binding.extraSort.visibility = View.VISIBLE
-            var is_normal = true
-            val extraSort: String = binding.extraSort.selectedItem.toString()
+                binding.extraSort.visibility = View.VISIBLE
+                var is_normal = true
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-            if (extraSort == "Найстаріші") {
-                is_normal = false
+                if (extraSort == "Найстаріші") {
+                    is_normal = false
+                }
+                binding.extraSort.visibility = View.VISIBLE
+                dataArrayList = ArrayList(sortListReportDataByDate(dataArrayList, is_normal))
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
             }
-            binding.extraSort.visibility = View.VISIBLE
-            dataArrayList = ArrayList(sortListReportDataByDate(dataArrayList, is_normal))
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.adapter = listAdapter
-        } else if (sort == "За алфавітним порядком") {
-            ArrayAdapter.createFromResource(
-                this@ReportView,
-                R.array.sort_types_alphabet,
-                R.layout.spinner_list
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.extraSort.adapter = adapter
-            }
-            binding.extraSort.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
-            binding.sortIncomesExpenses.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
+            "За алфавітним порядком" -> {
+                ArrayAdapter.createFromResource(
+                    this@ReportView,
+                    R.array.sort_types_alphabet,
+                    R.layout.spinner_list
+                ).also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    binding.extraSort.adapter = adapter
+                }
+                binding.extraSort.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
+                binding.sortIncomesExpenses.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
 
-            val extraSort: String = binding.extraSort.selectedItem.toString()
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-            if (extraSort == "Від Я до А (Z до A)") {
-                dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, false))
-            } else {
-                dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, true))
+                if (extraSort == "Від Я до А (Z до A)") {
+                    dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, false))
+                } else {
+                    dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, true))
+                }
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
             }
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.adapter = listAdapter
-        } else {
-            ArrayAdapter.createFromResource(
-                this@ReportView,
-                R.array.sort_types_price,
-                R.layout.spinner_list
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.extraSort.adapter = adapter
-            }
-            binding.sortIncomesExpenses.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
-            binding.extraSort.background.setColorFilter(
-                resources.getColor(R.color.spinner_color),
-                PorterDuff.Mode.SRC_ATOP
-            );
+            else -> {
+                ArrayAdapter.createFromResource(
+                    this@ReportView,
+                    R.array.sort_types_price,
+                    R.layout.spinner_list
+                ).also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    binding.extraSort.adapter = adapter
+                }
+                binding.sortIncomesExpenses.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
+                binding.extraSort.background.setColorFilter(
+                    resources.getColor(R.color.spinner_color),
+                    PorterDuff.Mode.SRC_ATOP
+                );
 
-            var isIncome = true
-            var lowestFirst = true
-            if (sort == "Спочатку витрати, потім доходи") {
-                isIncome = false
-            }
-            val extraSort: String = binding.extraSort.selectedItem.toString()
+                var isIncome = true
+                var lowestFirst = true
+                if (sort == "Спочатку витрати, потім доходи") {
+                    isIncome = false
+                }
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-            if (extraSort == "Спочатку найбільша ціна") {
-                lowestFirst = false
-            }
-            binding.extraSort.visibility = View.VISIBLE
-            dataArrayList = ArrayList(sortListData(dataArrayList, isIncome, lowestFirst))
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.adapter = listAdapter
+                if (extraSort == "Спочатку найбільша ціна") {
+                    lowestFirst = false
+                }
+                binding.extraSort.visibility = View.VISIBLE
+                dataArrayList = ArrayList(sortListData(dataArrayList, isIncome, lowestFirst))
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
 
+            }
         }
 
     }
 
     fun sort_all2() {
-        val sort: String = binding.sortIncomesExpenses.getSelectedItem().toString()
+        val sort: String = binding.sortIncomesExpenses.selectedItem.toString()
 
-        if (sort == "За датою") {
-            var is_normal = true
-            val extraSort: String = binding.extraSort.getSelectedItem().toString()
+        when (sort) {
+            "За датою" -> {
+                var is_normal = true
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-            if (extraSort == "Найстаріші") {
-                is_normal = false
+                if (extraSort == "Найстаріші") {
+                    is_normal = false
+                }
+                binding.extraSort.visibility = View.VISIBLE
+                dataArrayList = ArrayList(sortListReportDataByDate(dataArrayList, is_normal))
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
+
             }
-            binding.extraSort.visibility = View.VISIBLE
-            dataArrayList = ArrayList(sortListReportDataByDate(dataArrayList, is_normal))
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.setAdapter(listAdapter)
+            "За алфавітним порядком" -> {
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-        } else if (sort == "За алфавітним порядком") {
-            val extraSort: String = binding.extraSort.getSelectedItem().toString()
+                if (extraSort == "Від Я до А (Z до A)") {
+                    dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, false))
+                } else {
+                    dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, true))
+                }
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
+            }
+            else -> {
+                var isIncome = true
+                var lowestFirst = true
+                if (sort == "Спочатку витрати, потім доходи") {
+                    isIncome = false
+                }
+                val extraSort: String = binding.extraSort.selectedItem.toString()
 
-            if (extraSort == "Від Я до А (Z до A)") {
-                dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, false))
-            } else {
-                dataArrayList = ArrayList(sortListAlphabetically(dataArrayList, true))
+                if (extraSort == "Спочатку найбільша ціна") {
+                    lowestFirst = false
+                }
+                binding.extraSort.visibility = View.VISIBLE
+                dataArrayList = ArrayList(sortListData(dataArrayList, isIncome, lowestFirst))
+                listAdapter = ReportAdapter(this@ReportView, dataArrayList)
+                binding.listReview.adapter = listAdapter
             }
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.setAdapter(listAdapter)
-        } else {
-            var isIncome = true
-            var lowestFirst = true
-            if (sort == "Спочатку витрати, потім доходи") {
-                isIncome = false
-            }
-            val extraSort: String = binding.extraSort.getSelectedItem().toString()
-
-            if (extraSort.equals("Спочатку найбільша ціна")) {
-                lowestFirst = false
-            }
-            binding.extraSort.visibility = View.VISIBLE
-            dataArrayList = ArrayList(sortListData(dataArrayList, isIncome, lowestFirst))
-            listAdapter = ReportAdapter(this@ReportView, dataArrayList)
-            binding.listReview.setAdapter(listAdapter)
         }
     }
 }

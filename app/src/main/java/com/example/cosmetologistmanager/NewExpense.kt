@@ -103,7 +103,7 @@ class NewExpense : AppCompatActivity() {
         val expense_name = binding.newExpenseName.text.toString()
         val expense_price = binding.newExpensePrice.text.toString()
 
-        if (expense_name.equals("")) {
+        if (expense_name == "") {
             val text = "Поле назви витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -111,7 +111,7 @@ class NewExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (expense_price.equals("")) {
+        if (expense_price == "") {
             val text = "Поле ціни витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -119,7 +119,7 @@ class NewExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (isFutureDate(date_day?.toInt()!!, date_month?.toInt()!!, date_year?.toInt()!!)) {
+        if (isFutureDate(date_day.toInt(), date_month.toInt(), date_year.toInt())) {
             val text = "Дата витрати не може бути у майбутньому"
             val duration = Toast.LENGTH_LONG
 
@@ -132,6 +132,7 @@ class NewExpense : AppCompatActivity() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
 
         if (wasTheInformationChanged()) {
@@ -139,10 +140,10 @@ class NewExpense : AppCompatActivity() {
             builder
                 .setMessage("Ви точно хочете закінчити додавання нової витрати?")
                 .setTitle("Дані не будуть збережені")
-                .setPositiveButton("Так") { dialog, which ->
+                .setPositiveButton("Так") { _, _ ->
                     this.finish()
                 }
-                .setNegativeButton("Ні") { dialog, which ->
+                .setNegativeButton("Ні") { _, _ ->
                 }
 
             val dialog: AlertDialog = builder.create()
@@ -152,7 +153,7 @@ class NewExpense : AppCompatActivity() {
             this.finish()
         }
     }
-    fun wasTheInformationChanged(): Boolean {
+    private fun wasTheInformationChanged(): Boolean {
         var changed = false
         val expense_name = binding.newExpenseName.text.toString().trim()
         val procedure_price = binding.newExpensePrice.text.toString()

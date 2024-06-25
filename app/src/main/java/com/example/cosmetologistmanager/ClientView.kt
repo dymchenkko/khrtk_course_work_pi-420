@@ -143,6 +143,7 @@ class ClientView : AppCompatActivity() {
         }
 
     }
+    @SuppressLint("SetTextI18n")
     override fun onRestart() {
         super.onRestart()
         var hash: String? = "";

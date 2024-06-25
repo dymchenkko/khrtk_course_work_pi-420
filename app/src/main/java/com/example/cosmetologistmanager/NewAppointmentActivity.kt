@@ -54,21 +54,14 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
                             val user: Client? = snapshot.getValue(Client::class.java)
-                            Log.d("client hash", snapshot?.key.toString())
                             items.add(
                                 Pair(
                                     user?.surname + " " + user?.name + " " + user?.patronymic,
                                     snapshot?.key.toString()
                                 )
                             )
-
-                            Log.d("items", "$items")
-
                             val clients: MutableList<String> =
                                 items.map { it.first }.toMutableList()
-
-                            Log.d("clients hash all", "$clients")
-
                             val ad: ArrayAdapter<String> = ArrayAdapter<String>(
                                 this@NewAppointmentActivity,
                                 android.R.layout.simple_spinner_item,
@@ -88,9 +81,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                             )
                             val clients: MutableList<String> =
                                 items.map { it.first }.toMutableList()
-
-                            Log.d("clients hash all", "$clients")
-
                             val ad: ArrayAdapter<String> = ArrayAdapter<String>(
                                 this@NewAppointmentActivity,
                                 android.R.layout.simple_spinner_item,
@@ -102,7 +92,6 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
                             binding.clientsListSpinner.adapter = ad
                             zero_clients = true
                         }
-                        Log.d("size", items.size.toString())
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -211,23 +200,19 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
 
         }
     }
-    fun wasTheInformationChanged(): Boolean {
+    private fun wasTheInformationChanged(): Boolean {
         var changed = false
         val procedure_name = binding.newProcedureName.text.toString().trim()
         val additional_information =
             binding.newAdditionalInformation.text.toString().trim()
         val procedure_price = binding.newAppointmentPrice.text.toString().trim()
         val client: String =
-            binding.clientsListSpinner.getSelectedItem().toString()
-        Log.e("client", client)
-
+            binding.clientsListSpinner.selectedItem.toString()
         if (procedure_name != "" ||
             additional_information != "" ||
             procedure_price != "") {
-            Log.e("not equeal", "not equal")
             changed = true
         }
-        Log.e("changed", changed.toString())
 
         return changed
     }
@@ -238,9 +223,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         when (view?.id) {
-            1 -> showToast(message = "Spinner 2 Position:${position} and language: fwfewfew")
             else -> {
-                showToast(message = "Spinner 1 Position:${position} and language:----")
             }
         }
     }
@@ -267,7 +250,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
         val time_minute = binding.timePickerButton.minute.toString()
         val procedure_name = binding.newProcedureName.text.toString()
         val procedure_price = binding.newAppointmentPrice.text.toString()
-        if (procedure_name.equals("")) {
+        if (procedure_name == "") {
             val text = "Поле назви процедури не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -275,7 +258,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             toast.show()
             return false
         }
-        if (procedure_price.equals("")) {
+        if (procedure_price == "") {
             val text = "Поле ціни не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -283,7 +266,7 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             toast.show()
             return false
         }
-        if (procedure_price?.toInt()!! < 0) {
+        if (procedure_price.toInt() < 0) {
             val text = "Ціна процедури не може бути від'ємною"
             val duration = Toast.LENGTH_LONG
 
@@ -313,22 +296,20 @@ class NewAppointmentActivity : AppCompatActivity(), AdapterView.OnItemSelectedLi
             val toast = Toast.makeText(this@NewAppointmentActivity, text, duration)
             toast.show()
         }
-
-
         return true
-
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (wasTheInformationChanged()) {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this@NewAppointmentActivity)
             builder
                 .setMessage("Ви точно хочете закінчити додавання нового запису?")
                 .setTitle("Дані не будуть збережені")
-                .setPositiveButton("Так") { dialog, which ->
+                .setPositiveButton("Так") { _, _ ->
                     this.finish()
                 }
-                .setNegativeButton("Ні") { dialog, which ->
+                .setNegativeButton("Ні") { _, _ ->
                 }
 
             val dialog: AlertDialog = builder.create()

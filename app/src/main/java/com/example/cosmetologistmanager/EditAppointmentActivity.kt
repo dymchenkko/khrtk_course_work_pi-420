@@ -203,49 +203,44 @@ class EditAppointmentActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         val procedure_name = binding.newProcedureName.text.toString()
-                    val date_day = binding.datePickerButton.dayOfMonth.toString()
-                    var date_month = binding.datePickerButton.month.toString()
-                    date_month = (date_month.toInt() + 1).toString()
-                    val date_year = binding.datePickerButton.year.toString()
-                    val time_hour = binding.timePickerButton.hour.toString()
-                    val time_minute = binding.timePickerButton.minute.toString()
-                    val additional_information =
-                        binding.newAdditionalInformation.text.toString()
-                    val procedure_price = binding.editAppointmentPrice.text.toString()
-                    val client: String =
-                        binding.clientsListSpinner.getSelectedItem().toString()
-                    Log.e("client", client)
-                    Log.e("items len", items.size.toString())
-
-                    for (pair in items) {
-                        if (pair.first == client) {
-                            if (appointment.procedure != procedure_name ||
-                                appointment.day != date_day ||
-                                appointment.month != date_month ||
-                                appointment.year != date_year ||
-                                appointment.hour != time_hour ||
-                                appointment.minute != time_minute ||
-                                appointment.additional_information != additional_information ||
-                                appointment.price != procedure_price ||
-                                appointment.client != pair.second) {
-                                Log.e("not equeal", "not equal")
-                                changed = true
-                            }
-                        }
-                    }
-            Log.e("changed", changed.toString())
-
-            return changed
-    }
-        @RequiresApi(Build.VERSION_CODES.O)
-    fun validate(): Boolean {
-
         val date_day = binding.datePickerButton.dayOfMonth.toString()
         var date_month = binding.datePickerButton.month.toString()
         date_month = (date_month.toInt() + 1).toString()
         val date_year = binding.datePickerButton.year.toString()
         val time_hour = binding.timePickerButton.hour.toString()
         val time_minute = binding.timePickerButton.minute.toString()
+        val additional_information =
+            binding.newAdditionalInformation.text.toString()
+        val procedure_price = binding.editAppointmentPrice.text.toString()
+        val client: String =
+            binding.clientsListSpinner.selectedItem.toString()
+        Log.e("client", client)
+        Log.e("items len", items.size.toString())
+
+        for (pair in items) {
+            if (pair.first == client) {
+                if (appointment.procedure != procedure_name ||
+                    appointment.day != date_day ||
+                    appointment.month != date_month ||
+                    appointment.year != date_year ||
+                    appointment.hour != time_hour ||
+                    appointment.minute != time_minute ||
+                    appointment.additional_information != additional_information ||
+                    appointment.price != procedure_price ||
+                    appointment.client != pair.second) {
+                    Log.e("not equeal", "not equal")
+                    changed = true
+                }
+            }
+        }
+        Log.e("changed", changed.toString())
+
+        return changed
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun validate(): Boolean {
+
+        var date_month = binding.datePickerButton.month.toString()
         val procedure_name = binding.newProcedureName.text.toString()
         val procedure_price = binding.editAppointmentPrice.text.toString()
 
@@ -272,20 +267,6 @@ class EditAppointmentActivity : AppCompatActivity() {
             val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
             toast.show()
             return false
-        }
-        if (isDateTimeInThePast(
-                date_day.toInt(),
-                date_month.toInt(),
-                date_year.toInt(),
-                time_hour.toInt(),
-                time_minute.toInt()
-            )
-        ) {
-            /*val text = "Зверніть увагу, що ви додали дату і час у минулому!"
-            val duration = Toast.LENGTH_LONG
-
-            val toast = Toast.makeText(this@EditAppointmentActivity, text, duration)
-            toast.show()*/
         }
         return true
     }

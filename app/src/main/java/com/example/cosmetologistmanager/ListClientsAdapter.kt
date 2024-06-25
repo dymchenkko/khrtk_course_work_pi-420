@@ -15,6 +15,7 @@ class ListClientsAdapter(context: Context, dataArrayList: ArrayList<ListClientDa
         context, R.layout.list_client_item,
         dataArrayList
     ) {
+    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view
         val listData = getItem(position)
@@ -22,7 +23,7 @@ class ListClientsAdapter(context: Context, dataArrayList: ArrayList<ListClientDa
             view = LayoutInflater.from(context).inflate(R.layout.list_client_item, parent, false)
         }
         val listName = view?.findViewById<TextView>(R.id.clientName)
-        listName?.text = listData!!.surname + " " + listData!!.name  + " " + listData!!.patronymic.toString()
+        listName?.text = listData!!.surname + " " + listData.name  + " " + listData.patronymic
         return view!!
     }
 }

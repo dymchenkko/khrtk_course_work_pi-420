@@ -15,7 +15,7 @@ class AppointmentView : AppCompatActivity() {
     private lateinit var binding: ActivityAppointmentViewBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,16 +34,16 @@ class AppointmentView : AppCompatActivity() {
                 FirebaseDatabase.getInstance().reference.child("appointments").child(uid)
                     .child(hash.toString()).get().addOnSuccessListener {
                     val appointment: Appointment? = it.getValue(Appointment::class.java)
-                        binding.appointmentName.setText("Процедура: " + appointment?.procedure)
-                        binding.dateTextView.setText("Дата процедури: ${addLeadingZero(appointment?.day.toString())}/${addLeadingZero(appointment?.month.toString())}/${appointment?.year}")
-                        binding.timeTextView.setText("Час процедури: ${addLeadingZero(appointment?.hour.toString())}:${addLeadingZero(appointment?.minute.toString())}")
-                        binding.additionalInformationTextView.setText("Додаткова інформація:" + appointment?.additional_information)
-                        binding.priceTextView.setText("Вартість: ${appointment?.price.toString()} грн.")
+                        binding.appointmentName.text = "Процедура: " + appointment?.procedure
+                        binding.dateTextView.text = "Дата процедури: ${addLeadingZero(appointment?.day.toString())}/${addLeadingZero(appointment?.month.toString())}/${appointment?.year}"
+                        binding.timeTextView.text = "Час процедури: ${addLeadingZero(appointment?.hour.toString())}:${addLeadingZero(appointment?.minute.toString())}"
+                        binding.additionalInformationTextView.text = "Додаткова інформація:" + appointment?.additional_information
+                        binding.priceTextView.text = "Вартість: ${appointment?.price.toString()} грн."
 
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid).child(appointment?.client.toString())
                             .get().addOnSuccessListener {
                                 var client: Client? = it.getValue(Client::class.java)
-                                binding.clientTextView.setText("Клієнт: ${client?.surname} ${client?.name} ${client?.patronymic}")
+                                binding.clientTextView.text = "Клієнт: ${client?.surname} ${client?.name} ${client?.patronymic}"
                                 binding.clientTextView.setOnClickListener {
                                     val intent = Intent(this@AppointmentView, ClientView::class.java)
                                     intent.putExtra("hash", appointment?.client.toString())

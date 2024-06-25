@@ -97,7 +97,7 @@ class SignUpActivity : AppCompatActivity() {
                             startActivity(intent)
                         } else {
                             try {
-                                throw it.getException()!!
+                                throw it.exception!!
                             } catch (e: FirebaseAuthWeakPasswordException) {
                                 Toast.makeText(this, "Слабкий пароль", Toast.LENGTH_SHORT).show()
                             } catch (e: FirebaseAuthInvalidCredentialsException) {

@@ -32,24 +32,21 @@ class ClientsActivity : AppCompatActivity() {
 
         val user = firebaseAuth.currentUser
         user?.let {
-            var uid = it.uid
+            val uid = it.uid
 
             FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
                             val client: Client? = snapshot.getValue(Client::class.java)
-                            Log.d("hash", snapshot?.key+"")
                             var listData = ListClientData(
                                 client?.name.toString(), client?.surname.toString(), client?.patronymic.toString(), snapshot?.key.toString()
                             )
-                            Log.d("name", client?.surname.toString())
 
                             dataArrayList.add(listData)
                             listAdapter = ListClientsAdapter(this@ClientsActivity, dataArrayList)
                             binding.listClients.adapter = listAdapter
                             binding.listClients.isClickable = true
-                            Log.d("list of appointments", items.toString())
                         }
 
                         if (dataArrayList.size == 0) {
@@ -96,10 +93,7 @@ class ClientsActivity : AppCompatActivity() {
     }
 
     private fun updateFilteredList(text: String) {
-        // Clear previous filteredList
         filteredList.clear()
-
-        // Filter originalList based on the text entered
         dataArrayList.forEach { clientData ->
             if (clientData.name.contains(text, ignoreCase = true) ||
                 clientData.surname.contains(text, ignoreCase = true) ||
@@ -108,8 +102,5 @@ class ClientsActivity : AppCompatActivity() {
                 filteredList.add(clientData)
             }
         }
-
-        // Now you have the filtered list, you can use it as needed
-        // For example, update your RecyclerView adapter if you're using one
     }
 }

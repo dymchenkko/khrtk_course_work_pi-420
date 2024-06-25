@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         val items = mutableListOf<String>()
         dataArrayList = ArrayList()
-        binding.bottomNavigation.setItemIconTintList(null);
-        Log.d("main 0n create", "main_on_create")
+        binding.bottomNavigation.itemIconTintList = null;
 
         binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             if (item.itemId == R.id.new_client) {
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                                     == new_appointment.month && binding.datePicker.year.toString()
                                     == new_appointment.year
                             ) {
-                                var listData = ListAppointmentData(
+                                val listData = ListAppointmentData(
                                     new_appointment.procedure.toString(),
                                     addLeadingZero(new_appointment.hour.toString()),
                                     addLeadingZero(new_appointment.minute.toString()),
@@ -86,8 +85,8 @@ class MainActivity : AppCompatActivity() {
 
                             }
                             listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
-                            binding.listAppointments.setAdapter(listAdapter)
-                            binding.listAppointments.setClickable(true)
+                            binding.listAppointments.adapter = listAdapter
+                            binding.listAppointments.isClickable = true
                             Log.d("list of appointments", items.toString())
                         }
                     }
@@ -95,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
         }
-        binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
+        binding.datePicker.setOnDateChangedListener { _, _, _, _ ->
             dataArrayList = ArrayList()
             val user = firebaseAuth.currentUser
             user?.let { it ->
@@ -110,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
                                 if (binding.datePicker.dayOfMonth.toString() == new_appointment!!.day && (binding.datePicker.month + 1).toString() == new_appointment!!.month && binding.datePicker.year.toString() == new_appointment!!.year
                                 ) {
-                                    var listData = ListAppointmentData(
+                                    val listData = ListAppointmentData(
                                         new_appointment.procedure.toString(),
                                         addLeadingZero(new_appointment.hour.toString()),
                                         addLeadingZero(new_appointment.minute.toString()),
@@ -118,18 +117,18 @@ class MainActivity : AppCompatActivity() {
                                     )
                                     dataArrayList.add(listData)
                                     dataArrayList.sortWith(compareBy({ it.hour?.toIntOrNull() },
-                                        { it.minute?.toIntOrNull() })
+                                        { it.minute.toIntOrNull() })
                                     )
 
                                 }
                                 listAdapter =
                                     ListAppointmentsAdapter(this@MainActivity, dataArrayList)
-                                binding.listAppointments.setAdapter(listAdapter)
-                                binding.listAppointments.setClickable(true)
+                                binding.listAppointments.adapter = listAdapter
+                                binding.listAppointments.isClickable = true
                                 Log.d("list of appointments", items.toString())
                                 Log.d(
                                     "appointments",
-                                    new_appointment?.procedure + " " + new_appointment?.hour + " " + new_appointment?.minute
+                                    new_appointment.procedure + " " + new_appointment.hour + " " + new_appointment.minute
                                 )
                             }
                         }
@@ -141,12 +140,12 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        binding.listAppointments.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
+        binding.listAppointments.onItemClickListener = OnItemClickListener { _, _, i, _ ->
             val intent = Intent(this@MainActivity, AppointmentView::class.java)
             intent.putExtra("name", dataArrayList[i].name)
             intent.putExtra("hash", dataArrayList[i].hash)
             startActivity(intent)
-        })
+        }
 
         binding.newExpenseButton.setOnClickListener{
             val intent = Intent(this@MainActivity, NewExpense::class.java)
@@ -183,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                                 == new_appointment.month && binding.datePicker.year.toString()
                                 == new_appointment.year
                             ) {
-                                var listData = ListAppointmentData(
+                                val listData = ListAppointmentData(
                                     new_appointment.procedure.toString(),
                                     addLeadingZero(new_appointment.hour.toString()),
                                     addLeadingZero(new_appointment.minute.toString()),
@@ -196,9 +195,8 @@ class MainActivity : AppCompatActivity() {
 
                             }
                             listAdapter = ListAppointmentsAdapter(this@MainActivity, dataArrayList)
-                            binding.listAppointments.setAdapter(listAdapter)
-                            binding.listAppointments.setClickable(true)
-                            //Log.d("list of appointments", items.toString())
+                            binding.listAppointments.adapter = listAdapter
+                            binding.listAppointments.isClickable = true
                         }
                     }
 

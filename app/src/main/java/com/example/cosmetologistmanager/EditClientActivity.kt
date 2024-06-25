@@ -44,11 +44,11 @@ class EditClientActivity : AppCompatActivity() {
             val user = firebaseAuth.currentUser
 
                 user?.let {
-                    var uid = it.uid
+                    val uid = it.uid
 
                     FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                         .child(hash).get().addOnSuccessListener {
-                            var client: Client? = it.getValue(Client::class.java)
+                            val client: Client? = it.getValue(Client::class.java)
 
                             binding.newClientName.setText(client?.name)
                             binding.newAllergy.setText(client?.allergy)
@@ -130,7 +130,7 @@ class EditClientActivity : AppCompatActivity() {
         val uid = user?.uid.toString()
         FirebaseDatabase.getInstance().reference.child("clients").child(uid)
             .child(hash).get().addOnSuccessListener {
-                var client: Client = it.getValue(Client::class.java)!!
+                val client: Client = it.getValue(Client::class.java)!!
                 if (wasTheInformationChanged(client)) {
                     val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditClientActivity)
                     builder
@@ -139,7 +139,7 @@ class EditClientActivity : AppCompatActivity() {
                         .setPositiveButton("Так") { dialog, which ->
                             this.finish()
                         }
-                        .setNegativeButton("Ні") { dialog, which ->
+                        .setNegativeButton("Ні") { _, _ ->
                         }
 
                     val dialog: AlertDialog = builder.create()
@@ -168,9 +168,9 @@ class EditClientActivity : AppCompatActivity() {
             binding.skinTypeSpinner.getSelectedItem().toString().trim()
         val additional_information =
             binding.newAdditionalInformation.text.toString().trim()
-                if (client?.name != name ||
-                    client?.surname != surname ||
-                    client?.patronymic != patronymic ||
+                if (client.name != name ||
+                    client.surname != surname ||
+                    client.patronymic != patronymic ||
                     client.phone_number != phone_number ||
                     client.allergy != allergy ||
                     client.skin_condition != skin_condition ||
@@ -183,10 +183,10 @@ class EditClientActivity : AppCompatActivity() {
     fun validate(): Boolean {
         val regex = Regex("[^\\p{L}]")
 
-        var name = binding.newClientName.text.toString().trim()
-        var surname = binding.newClientSurname.text.toString().trim()
-        var patronymic = binding.newClientPatronymic.text.toString().trim()
-        var phone_number = binding.newPhoneNumber.text.toString()
+        val name = binding.newClientName.text.toString().trim()
+        val surname = binding.newClientSurname.text.toString().trim()
+        val patronymic = binding.newClientPatronymic.text.toString().trim()
+        val phone_number = binding.newPhoneNumber.text.toString()
 
         if (regex.containsMatchIn(name) || regex.containsMatchIn(surname) || regex.containsMatchIn(
                 patronymic

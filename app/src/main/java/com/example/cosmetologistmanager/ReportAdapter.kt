@@ -23,12 +23,12 @@ class ReportAdapter(context: Context, dataArrayList: ArrayList<ListReportData>) 
         }
         val listName = view?.findViewById<TextView>(R.id.listName)
         val listDate: TextView = view?.findViewById<TextView>(R.id.listDate) as TextView
-        val listPrice: TextView = view?.findViewById<TextView>(R.id.listPrice) as TextView
-        val listImage: ImageView = view?.findViewById<ImageView>(R.id.expense_icon) as ImageView
+        val listPrice: TextView = view.findViewById<TextView>(R.id.listPrice) as TextView
+        val listImage: ImageView = view.findViewById<ImageView>(R.id.expense_icon) as ImageView
 
         listName?.text = listData!!.name
         listDate.text = addLeadingZero(listData.day) + "/" + addLeadingZero(listData.month) + "/" + listData.year
-        listPrice?.text = listData!!.price + " грн."
+        listPrice.text = listData.price + " грн."
         if (listData.kind == OperationKind.Income) {
             listPrice.setTextColor(Integer.parseUnsignedInt("FF018786",16))
             listImage.setImageResource(R.drawable.income)

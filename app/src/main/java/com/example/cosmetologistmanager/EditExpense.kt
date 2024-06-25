@@ -36,7 +36,6 @@ class EditExpense : AppCompatActivity() {
 
         binding = ActivityEditExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val items = mutableListOf<Pair<String, String>>()
 
         val intent = this.intent
         if (intent != null) {
@@ -50,7 +49,7 @@ class EditExpense : AppCompatActivity() {
 
                 FirebaseDatabase.getInstance().reference.child("expenses").child(uid)
                     .child(hash).get().addOnSuccessListener {
-                        var expense: Expense? = it.getValue(Expense::class.java)
+                        val expense: Expense? = it.getValue(Expense::class.java)
                         val year = expense?.year?.toInt()!!
                         val month = expense.month?.toInt()!!
                         val day = expense.day?.toInt()!!
@@ -102,14 +101,14 @@ class EditExpense : AppCompatActivity() {
                                 .setPositiveButton("Так") { dialog, which ->
                                     val user = firebaseAuth.currentUser
                                     user?.let {
-                                        var uid = it.uid
+                                        val uid = it.uid
                                         FirebaseDatabase.getInstance().reference.child("expenses")
                                             .child(uid).child(hash).removeValue();
                                         this.finish();
 
                                     }
                                 }
-                                .setNegativeButton("Ні") { dialog, which ->
+                                .setNegativeButton("Ні") { _, _ ->
                                 }
 
                             val dialog: AlertDialog = builder.create()
@@ -134,10 +133,10 @@ class EditExpense : AppCompatActivity() {
                     builder
                         .setMessage("Ви точно хочете закінчити редагування?")
                         .setTitle("Дані не збережені і інформація не буде оновлена.")
-                        .setPositiveButton("Так") { dialog, which ->
+                        .setPositiveButton("Так") { _, _ ->
                             this.finish()
                         }
-                        .setNegativeButton("Ні") { dialog, which ->
+                        .setNegativeButton("Ні") { _, _ ->
                         }
 
                     val dialog: AlertDialog = builder.create()
@@ -159,9 +158,9 @@ class EditExpense : AppCompatActivity() {
         date_month = (date_month.toInt() + 1).toString().trim()
         val date_year = binding.datePickerButton.year.toString().trim()
         val procedure_price = binding.editExpensePrice.text.toString()
-        if (expense?.name != expense_name ||
-            expense?.day != date_day ||
-            expense?.month != date_month ||
+        if (expense.name != expense_name ||
+            expense.day != date_day ||
+            expense.month != date_month ||
             expense.year != date_year ||
             expense.price != procedure_price) {
             changed = true
@@ -176,7 +175,7 @@ class EditExpense : AppCompatActivity() {
         val date_year = binding.datePickerButton.year.toString()
         val expense_name = binding.editExpenseName.text.toString()
         val expense_price = binding.editExpensePrice.text.toString()
-        if (expense_name.equals("")){
+        if (expense_name == ""){
             val text = "Поле назви витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -184,7 +183,7 @@ class EditExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (expense_price.equals("")){
+        if (expense_price == ""){
             val text = "Поле ціни витрати не може бути пустим"
             val duration = Toast.LENGTH_LONG
 
@@ -192,7 +191,7 @@ class EditExpense : AppCompatActivity() {
             toast.show()
             return false
         }
-        if (isFutureDate(date_day?.toInt()!!, date_month?.toInt()!!, date_year?.toInt()!!)){
+        if (isFutureDate(date_day.toInt(), date_month.toInt(), date_year.toInt())){
             val text = "Дата витрати не може бути у майбутньому"
             val duration = Toast.LENGTH_LONG
 

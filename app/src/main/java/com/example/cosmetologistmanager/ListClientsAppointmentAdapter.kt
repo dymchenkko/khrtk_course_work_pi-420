@@ -14,6 +14,7 @@ class ListClientsAppointmentsAdapter(context: Context, dataArrayList: ArrayList<
         context, R.layout.list_item_clients_appointment,
         dataArrayList
     ) {
+    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var view = view
         val listData = getItem(position)

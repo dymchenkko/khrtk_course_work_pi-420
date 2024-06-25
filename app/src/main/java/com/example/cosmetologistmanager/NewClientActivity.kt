@@ -61,7 +61,7 @@ class NewClientActivity : AppCompatActivity() {
             if (validate()) {
                 user?.let {
 
-                    var uid = it.uid
+                    val uid = it.uid
                     var is_unique = true
                         FirebaseDatabase.getInstance().reference.child("clients").child(uid)
                             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -115,16 +115,17 @@ class NewClientActivity : AppCompatActivity() {
             }
         }
     }
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (wasTheInformationChanged()) {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder
                 .setMessage("Ви точно хочете закінчити додавання нового клієнта?")
                 .setTitle("Дані не будуть збережені")
-                .setPositiveButton("Так") { dialog, which ->
+                .setPositiveButton("Так") { _, _ ->
                     this.finish()
                 }
-                .setNegativeButton("Ні") { dialog, which ->
+                .setNegativeButton("Ні") { _, _ ->
                 }
 
             val dialog: AlertDialog = builder.create()
@@ -135,7 +136,7 @@ class NewClientActivity : AppCompatActivity() {
         }
 
     }
-    fun wasTheInformationChanged(): Boolean {
+    private fun wasTheInformationChanged(): Boolean {
         var changed = false
         val name = binding.newClientName.text.toString().trim()
         val surname = binding.newClientSurname.text.toString().trim()
